@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<html>
+    <head>
+        <title>Morrowind Dialog Explorer</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="./favicon.png"/>
+    </head>
+    
+    <style>
+        @font-face{
+            font-family: "Gentium Book Basic";
+            src: url("./font/GenBkBasB.ttf") format("truetype");
+        }
+        body {
+            background-color: #532;
+            font-family: "Gentium Book Basic", "Times New Roman", Times, serif;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            min-height: 100%;
+        }
+        .bg {
+            position: fixed;
+            z-index: -1;
+            background-image: url("./background.jpg");
+            background-size: auto 100%;
+            background-position: center;
+            width: 100%;
+            height: 100vh;
+        }
+        .content {
+            width: 800px;
+            min-height: 100vh;
+            margin: 0 auto;
+            font-size: 20px;
+            background-color: #dc9;
+            color: #000;
+            padding: 14px 36px;
+            padding-bottom: 100px;
+            box-sizing: border-box;
+        }
+        h1, h2 {
+            color: #711;
+            /*text-shadow: 1px 1px 0px #ba8;*/
+            margin: 8px 0;
+        }
+        h1 {
+            font-size: 36px;
+            margin-top: 20px;
+        }
+        h2 {
+            font-size: 28px;
+            margin-top: 36px;
+        }
+        a, a:visited {
+            color: #56c;
+            text-decoration: none;
+        }
+        a:hover, a:active {
+            text-decoration: underline;
+        }
+        li {
+            margin: 16px;
+        }
+        .code {
+            margin: 4px 0;
+            padding: 20px;
+            font-family: "Courier New", courier-new, monospace;
+            color: #f0f0f0;
+            background-color: #0c120d;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .sep {
+            width: auto;
+            height: 3px;
+            margin: 0;
+            background-color: #ba8;
+        }
+        
+        @media only screen and (max-width: 800px) {
+            body > div {
+                width: 100%;
+            }
+        }
+    </style>
+    
+    <body>
+        <div class="bg"></div>
+        <div class="content">
+            <h1>Morrowind Dialog Explorer</h1>
+            <div class="sep"></div>
+            <p>
+                MWDE is a mod tool for
+                <a href="http://en.uesp.net/wiki/Morrowind:Morrowind">
+                The Elder Scrolls III: Morrowind</a>.
+                It allows you to search and explore Morrowind's dialog topics
+                and responses.
+                It has a command-line interface, which might get some getting
+                used to! But it'll be easy once you've got the hang of it.
+            </p>
+            <p>
+                <a href="">Download Morrowind Dialog Explorer v1.0</a>
+            </p>
+            <h2>Setting up and using MWDE</h2>
+            <div class="sep"></div>
+            <p>
+                To run MWDE, you'll need to have <a href="">Python</a>
+                installed on your computer.
+                MWDE is compatible with recent Python 2.x and Python 3.x
+                versions. That means it will be hard for you to
+                accidentally download a version of Python that doesn't
+                work with MWDE.
+                (If your computer runs OSX, then it probably
+                had Python already installed when you got it.)
+                <li><a href="https://docs.python.org/3/using/windows.html">How to install Python on Windows</a></li>
+                <li><a href="https://docs.python.org/3/using/mac.html">How to install Python on OSX</a></li>
+            </p>
+            <p>
+                Once Python is installed on your computer, you will need
+                to download Morrowind Dialog Explorer and unzip the
+                archive. (The download link is at the top of this page.)
+                You will need to set up MWDE by going into the extracted
+                folder and opening the file named "config.ini".
+                INI files are only a special kind of text file, so you
+                can edit it with Notepad or your choice of plain text
+                editor.
+            </p>
+            <p>
+                Inside "config.ini" is a lot of text to help you understand
+                how it works. The most important part is to enter the
+                paths to the Morrowind data files you want to load inside
+                the "[load_file_paths]" section.
+                Normally, this would be the paths to your Morrowind.esm,
+                Tribunal.esm, and Bloodmoon.esm files.
+            </p>
+            <p>
+                Once you've set up your file paths, you're ready to run
+                MWDE. Go back to the folder (the same one "config.ini" is in).
+                On Windows, double-click on "Morrowind Dialog Explorer.bat".
+                On OSX, open "Morrowind Dialog Explorer.app" instead.
+                A new console window will open and it will show something
+                like this.
+            </p>
+            <div class="code">
+                C:\MWDE>"C:\MWDE\Morrowind Dialog Explorer.bat"
+                <br>
+                <br>C:\MWDE\Morrowind Dialog Explorer>python src/dialog_explorer.py --config-path="./config.ini"
+                <br>Loading "C:\Steam\steamapps\common\Morrowind\Data Files\Morrowind.esm"...
+                <br>Loading "C:\Steam\steamapps\common\Morrowind\Data Files\Tribunal.esm"...
+                <br>Loading "C:\Steam\steamapps\common\Morrowind\Data Files\Bloodmoon.esm"...
+                <br>Finished loading 3 data files.
+                <br>
+                <br>Morrowind Dialog Explorer v1.0 is ready.
+                <br>query >
+            </div>
+            <p>
+                Now you're ready to start exploring!
+                You can type "help" into the console for a list of commands.
+                You can type "help &lt;command&gt;" to get help about how
+                to use a particular command.
+            </p>
+            <p>
+                Continue scrolling to see a few examples of what MWDE can do...
+            </p>
+            <div class="code">
+                Here is a list of commands. Type "help <command>" for
+                <br>more information about a particular command.
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;sub
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;re
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;npc
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;race
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;faction
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;cell
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;topic
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;quest
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;load
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;reload
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;unload
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;help
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;about
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;quit
+            </div>
+            <h2>
+                Get dialog and journal entries relating to a quest
+            </h2>
+            <div class="sep"></div>
+            <div class="code">
+                query > quest blades_nine_toes
+                <br>Starting quest search.
+                <br>
+                <br>&lt;Anyone&gt;  (blades_Nine_Toes)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;Nine-Toes gave me some moon sugar. He says most alchemists and apothecaries
+                <br>&nbsp;&nbsp;won't buy it, but Khajiit generally will. He suggested Ajira at the Balmora
+                <br>&nbsp;&nbsp;Mages Guild and Ra'Virr, a trader in Balmora.
+                <br>
+                <br>Actor: nine_toes  (Blades Trainers)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;Yes, I offer training, but only to Blades.
+                <br>
+                <br>Actor: nine_toes  (Blades Trainers)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;The basics we can teach you, won't cost much. Advanced training, though...
+                <br>&nbsp;&nbsp;that's expensive. If you're already skilled, you're much harder to teach.
+                <br>&nbsp;&nbsp;Maybe I can help you out. Here's a little moon sugar, on the house. You do
+                <br>&nbsp;&nbsp;know that trade in moon sugar and skooma is against the law, and most
+                <br>&nbsp;&nbsp;alchemists and apothecaries won't buy it. But Khajiit generally will. Try
+                <br>&nbsp;&nbsp;Ajira at the Balmora Mages Guild, or Ra'Virr, the trader in Balmora. Sell the
+                <br>&nbsp;&nbsp;sugar, and start saving for training.
+                <br>
+                <br>Actor: caius cosades  (Nine-Toes)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;To get to Hunter Nine-Toes, leave my door facing south. Go right, down the
+                <br>&nbsp;&nbsp;steps, then turn left and head south, looking for his door on your left.
+                <br>
+                <br>Finished showing 4 results.
+            </div>
+            <h2>
+                Get everything that a particular NPC might say
+            </h2>
+            <div class="sep"></div>
+            <div class="code">
+                query > npc ery
+                <br>Starting NPC search.
+                <br>
+                <br>Actor: ery  (Greeting 7)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;Good day. I'm Ery, publican of the Gateway Inn here in Sadrith Mora. We rent
+                <br>&nbsp;&nbsp;beds, and I have a limited selection of goods for barter. If you're new here,
+                <br>&nbsp;&nbsp;I can also tell you where to look for other services, or a specific place
+                <br>&nbsp;&nbsp;nearby. If you're looking  for someone in particular, I may be able to help.
+                <br>
+                <br>Actor: ery  &  Class: Publican  (Beds)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;Good. You can use the second floor loft.
+                <br>
+                <br>Finished showing 2 results.
+                <br>
+                <br>query > npc -c ery
+                <br>Starting NPC search.
+                <br>Including general class dialog.
+                <br>
+                <br>Class: Publican  (Cyrodiilic brandy)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;Cyrodiilic brandy, an invigorating and stimulating alcoholic beverage, is
+                <br>&nbsp;&nbsp;imported and expensive in Morrowind, but it is claimed to have none of the
+                <br>&nbsp;&nbsp;unpleasant side effects of other intoxicants. I hear it fortifies Willpower
+                <br>&nbsp;&nbsp;and Endurance. I don't know, myself... I save this for paying customers.
+                <br>
+                <br>Class: Publican  (Telvanni bug musk)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;Telvanni bug musk is an expensive perfume made from the scent glands of
+                <br>&nbsp;&nbsp;Grazelands beetles. The substance is sold in sealed flasks, and appears as a
+                <br>&nbsp;&nbsp;dark red-brown paste. The subtle but compelling fragrance is attractive to all
+                <br>&nbsp;&nbsp;mortal races and all sexes. Even a barbarian can be persuasive wearing this
+                <br>&nbsp;&nbsp;perfume.
+                <br>
+                <br>...
+                <br>
+                <br>Class: Publican  &  Cell: Mournhold  (Godsreach)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;Godsreach is on the western side of the city. There are a number of manors
+                <br>&nbsp;&nbsp;there, owned by some of the more wealthy citizens. You'll also find the
+                <br>&nbsp;&nbsp;Craftsmen's Hall, which is a fine place to find armor and weapons. They'll
+                <br>&nbsp;&nbsp;even make them to order, provided you have the materials. You can check out
+                <br>&nbsp;&nbsp;the Winged Guar Tavern as well. Not a bad place for a drink, or if you need a
+                <br>&nbsp;&nbsp;place to stay for the night. You might check out the Museum of Artifacts as
+                <br>&nbsp;&nbsp;well. The curator is always trying to add to the collection.
+                <br>
+                <br>Finished showing 32 results.
+                <br>
+                <br>query >
+            </div>
+            <h2>
+                Search for every time someone says "s'wit"
+            </h2>
+            <div class="sep"></div>
+            <div class="code">
+                query > sub s'wit
+                <br>Starting case-insensitive substring search.
+                <br>
+                <br>begin record search
+                <br>Actor: ranis athrys  (Trebonius)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;Imperial s'wit. He knows nothing of the Dunmer and even less of
+                <br>&nbsp;&nbsp;politics. When you're speaking with him, just nod your head and smile and then
+                <br>&nbsp;&nbsp;forget everything he said.
+                <br>
+                <br>Race: Dark Elf  (Attack)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;This is the end of you, s'wit.
+                <br>
+                <br>Race: Dark Elf  (Attack)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;This is the end of you, s'wit.
+                <br>
+                <br>Race: Dark Elf  (Hello)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;Filthy s'wit!
+                <br>
+                <br>Race: Dark Elf  &  Faction: Ashlanders  (Hello)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;Filthy s'wit!
+                <br>
+                <br>Race: Dark Elf  (Thief)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;Filthy S'wit!
+                <br>
+                <br>Race: Dark Elf  (Thief)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;Filthy S'wit!
+                <br>
+                <br>Actor: hainab lasamsi  (pants)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;Why do you want Hentus' pants? That s'wit couldn't put them on
+                <br>&nbsp;&nbsp;without help.
+                <br>
+                <br>Finished showing 8 results.
+            </div>
+        </div>
+    </body>
+</html>
