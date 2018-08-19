@@ -104,3 +104,4 @@ venv.bak/
 .mypy_cache/
 
 my_config.ini
+release/Morrowind Dialog Explorer*/
