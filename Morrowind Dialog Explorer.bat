@@ -1,0 +1,1 @@
+python src/dialog_explorer.py --no-colors --config-path="./config.ini"
