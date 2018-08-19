@@ -65,10 +65,22 @@
         }
         li {
             margin: 16px;
+            list-style: none;
+        }
+        li:before {
+            content: "•";
+            font-family: sans-serif;
+            font-size: 24px;
+            line-height: 20px;
+            margin-right: 6px;
+            vertical-align: middle;
         }
         p {
             line-height: 25px;
             margin: 36px 0;
+        }
+        .main-dl-link {
+            font-size: 22px;
         }
         .code {
             position: relative;
@@ -115,7 +127,7 @@
         @media only screen and (max-width: 850px) {
             .content {
                 width: 100%;
-                background-color: rgba(255, 234, 193, 0.7);
+                background-color: rgba(255, 234, 193, 0.75);
             }
             .code:after {
                 opacity: 0;
@@ -133,7 +145,7 @@
                 font-size: 23px;
             }
         }
-        @media only screen and (max-width: 500px) {
+        @media only screen and (max-width: 560px) {
             h1 {
                 font-size: 30px;
             }
@@ -146,8 +158,17 @@
                 line-height: 19px;
                 margin: 22px 0;
             }
+            li {
+                margin: 14px 0;
+            }
+            li:before {
+                font-size: 16px;
+            }
             .content {
                 padding: 12px 12px;
+            }
+            .main-dl-link {
+                font-size: 16px;
             }
             .code {
                 font-size: 8.5px;
@@ -175,7 +196,12 @@
                 used to! But it'll be easy once you've got the hang of it.
             </p>
             <p>
-                <a href="https://www.pineapplemachine.com/files/mwde/releases/Morrowind%20Dialog%20Explorer%20v1.0.zip">Download Morrowind Dialog Explorer v1.0</a>
+                <li class="main-dl-link">
+                    <a href="https://www.pineapplemachine.com/files/mwde/release/Morrowind%20Dialog%20Explorer%20v1.0.zip">Download Morrowind Dialog Explorer v1.0</a>
+                </li>
+                <li>
+                    <a href="https://github.com/pineapplemachine/mwde">View Morrowind Dialog Explorer on GitHub</a>
+                </li>
             </p>
             <h2>Setting up and using MWDE</h2>
             <div class="sep"></div>
@@ -189,8 +215,12 @@
                 work with MWDE.
                 (If your computer runs OSX, then it probably
                 had Python already installed when you got it.)
-                <li><a href="https://docs.python.org/3/using/windows.html">How to install Python on Windows</a></li>
-                <li><a href="https://docs.python.org/3/using/mac.html">How to install Python on OSX</a></li>
+                <li>
+                    <a href="https://docs.python.org/3/using/windows.html">How to install Python on Windows</a>
+                </li>
+                <li>
+                    <a href="https://docs.python.org/3/using/mac.html">How to install Python on OSX</a>
+                </li>
             </p>
             <p>
                 Once Python is installed on your computer, you will need
@@ -217,6 +247,8 @@
                 On OSX, open "Morrowind Dialog Explorer.app" instead.
                 A new console window will open and it will show something
                 like this.
+                (Linux users should open a command line, navigate to the
+                unzipped MWDE directory, and run "python src/dialog_explorer.py".)
             </p>
             <div class="code">
                 C:\MWDE>"C:\MWDE\Morrowind Dialog Explorer.bat"

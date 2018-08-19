@@ -43,6 +43,8 @@ On Windows, double-click on "Morrowind Dialog Explorer.bat".
 On OSX, open "Morrowind Dialog Explorer.app" instead.
 A new console window will open and it will show something
 like this.
+(Linux users should open a command line, navigate to the
+unzipped MWDE directory, and run "python src/dialog_explorer.py".)
 
 ```
 C:\MWDE>"C:\MWDE\Morrowind Dialog Explorer.bat"
