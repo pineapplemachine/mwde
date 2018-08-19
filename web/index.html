@@ -13,7 +13,7 @@
             src: url("./font/GenBkBasB.ttf") format("truetype");
         }
         body {
-            background-color: #532;
+            background-color: #242f1f;
             font-family: "Gentium Book Basic", "Times New Roman", Times, serif;
             padding: 0;
             margin: 0;
@@ -23,22 +23,25 @@
         .bg {
             position: fixed;
             z-index: -1;
-            background-image: url("./background.jpg");
+            background-image: url("./bg-fade.png");
             background-size: auto 100%;
             background-position: center;
+            background-repeat: no-repeat;
             width: 100%;
             height: 100vh;
         }
         .content {
-            width: 800px;
+            width: 835px;
             min-height: 100vh;
             margin: 0 auto;
             font-size: 20px;
             background-color: #dc9;
             color: #000;
-            padding: 14px 36px;
-            padding-bottom: 100px;
+            padding: 14px 58px;
+            padding-bottom: 20px;
             box-sizing: border-box;
+            box-shadow: 0 0 80px #222;
+            transition: background-color 1s ease;
         }
         h1, h2 {
             color: #711;
@@ -51,7 +54,7 @@
         }
         h2 {
             font-size: 28px;
-            margin-top: 36px;
+            margin-top: 52px;
         }
         a, a:visited {
             color: #56c;
@@ -63,14 +66,39 @@
         li {
             margin: 16px;
         }
+        p {
+            line-height: 25px;
+            margin: 36px 0;
+        }
         .code {
+            position: relative;
             margin: 4px 0;
+            margin-top: 44px;
             padding: 20px;
             font-family: "Courier New", courier-new, monospace;
+            font-size: 14px;
             color: #f0f0f0;
             background-color: #0c120d;
             border-radius: 8px;
-            font-size: 14px;
+            border-color: #0c120d;
+            border-style: solid;
+            border-width: 4px;
+            box-sizing: border-box;
+        }
+        .code:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: url("./bg-fade.png");
+            background-size: auto 100vh;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            transition: opacity 1s ease;
+            opacity: 0.16;
         }
         .sep {
             width: auto;
@@ -78,10 +106,56 @@
             margin: 0;
             background-color: #ba8;
         }
+        .img-copyright {
+            font-size: 14px;
+            text-align: right;
+            margin-top: 76px;
+        }
         
-        @media only screen and (max-width: 800px) {
-            body > div {
+        @media only screen and (max-width: 850px) {
+            .content {
                 width: 100%;
+                background-color: rgba(255, 234, 193, 0.7);
+            }
+            .code:after {
+                opacity: 0;
+            }
+        }
+        @media only screen and (max-width: 650px) {
+            .content {
+                padding: 14px 24px;
+            }
+            .code {
+                font-size: 11px;
+                margin-top: 36px;
+            }
+            h2 {
+                font-size: 23px;
+            }
+        }
+        @media only screen and (max-width: 500px) {
+            h1 {
+                font-size: 30px;
+            }
+            h2 {
+                font-size: 18px;
+                margin-top: 28px;
+            }
+            p, li {
+                font-size: 14px;
+                line-height: 19px;
+                margin: 22px 0;
+            }
+            .content {
+                padding: 12px 12px;
+            }
+            .code {
+                font-size: 8.5px;
+                margin-top: 24px;
+            }
+            .img-copyright {
+                font-size: 10px;
+                margin-top: 48px;
             }
         }
     </style>
@@ -93,7 +167,7 @@
             <div class="sep"></div>
             <p>
                 MWDE is a mod tool for
-                <a href="http://en.uesp.net/wiki/Morrowind:Morrowind">
+                <a href="https://en.wikipedia.org/wiki/The_Elder_Scrolls_III:_Morrowind">
                 The Elder Scrolls III: Morrowind</a>.
                 It allows you to search and explore Morrowind's dialog topics
                 and responses.
@@ -131,7 +205,7 @@
                 Inside "config.ini" is a lot of text to help you understand
                 how it works. The most important part is to enter the
                 paths to the Morrowind data files you want to load inside
-                the "[load_file_paths]" section.
+                the "load_file_paths" section.
                 Normally, this would be the paths to your Morrowind.esm,
                 Tribunal.esm, and Bloodmoon.esm files.
             </p>
@@ -249,7 +323,7 @@
                 <br>&nbsp;&nbsp;mortal races and all sexes. Even a barbarian can be persuasive wearing this
                 <br>&nbsp;&nbsp;perfume.
                 <br>
-                <br>...
+                <br>[...]
                 <br>
                 <br>Class: Publican  &  Cell: Mournhold  (Godsreach)
                 <br>&nbsp;&nbsp;&nbsp;&nbsp;Godsreach is on the western side of the city. There are a number of manors
@@ -261,8 +335,6 @@
                 <br>&nbsp;&nbsp;well. The curator is always trying to add to the collection.
                 <br>
                 <br>Finished showing 32 results.
-                <br>
-                <br>query >
             </div>
             <h2>
                 Search for every time someone says "s'wit"
@@ -301,6 +373,9 @@
                 <br>&nbsp;&nbsp;without help.
                 <br>
                 <br>Finished showing 8 results.
+            </div>
+            <div class="img-copyright">
+                Background image © Bethesda Softworks
             </div>
         </div>
     </body>
