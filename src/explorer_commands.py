@@ -56,7 +56,7 @@ def do_sub(es, config, text, flags):
                     index = match_response_text.find(match_text, index + len(text))
                     if index < 0: break
                     indexes.insert(0, index)
-                for index in indexes[::-1]:
+                for index in indexes:
                     high = index + len(text)
                     response_text = (
                         response_text[:index] + emphasis +
