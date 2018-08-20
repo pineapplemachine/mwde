@@ -114,7 +114,7 @@ except NameError:
 if config.get("substring_highlighting") or config.get("script_syntax_highlighting"):
     sys.stdout.write("\033[0m")
 
-print("\nMorrowind Dialog Explorer v1.0 is ready.")
+print("\nMorrowind Dialog Explorer v1.1 is ready.")
 
 while True:
     try:

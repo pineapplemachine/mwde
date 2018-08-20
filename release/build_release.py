@@ -1,7 +1,7 @@
 import os
 import shutil
 
-version = "v1.0"
+version = "v1.1"
 
 output_dir = "Morrowind Dialog Explorer %s" % version
 
