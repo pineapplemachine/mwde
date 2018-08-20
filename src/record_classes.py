@@ -18,7 +18,7 @@ class ESData(object):
         for es_file in self.es_files:
             for record in es_file.records:
                 yield record
-    def iter_info_records(self):
+    def iter_info_records(self, include_overwritten=False):
         num_files = len(self.es_files)
         for i in range(num_files):
             es_file = self.es_files[i]
@@ -26,12 +26,13 @@ class ESData(object):
                 if record.type_name != b"INFO":
                     continue
                 is_overwritten = False
-                for later_file in self.es_files[i + 1:]:
-                    if record.id_number in later_file.info_id_map:
-                        is_overwritten = True
-                        break
-                if is_overwritten:
-                    continue
+                if not include_overwritten:
+                    for later_file in self.es_files[i + 1:]:
+                        if record.id_number in later_file.info_id_map:
+                            is_overwritten = True
+                            break
+                    if is_overwritten:
+                        continue
                 yield record
     def get_record_by_name_id(self, record_name, name_id):
         for es_file in self.es_files:
