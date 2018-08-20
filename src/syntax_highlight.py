@@ -18,7 +18,7 @@ lexscan_list = [
     ScanExp(r'(?i)\b(elseif|ifx|if|else|endif|while|endwhile|return|begin|end|startscript|stopscript|float|short|long|set|to)\b', name="control"),
     ScanExp(r';.*', name="comment"),
     ScanExp(r'\s+', name="whitespace"),
-    ScanExp(r'\b[a-zA-Z][a-zA-Z0-9]*', name="word"),
+    ScanExp(r'\b[_a-zA-Z][_a-zA-Z0-9]*', name="word"),
 ]
 
 def syntax_highlight(text):
@@ -34,7 +34,7 @@ def syntax_highlight(text):
             else:
                 output_line += token.text
         output_lines.append(
-            line_number_color + str(i).rjust(3) + reset_color +
+            line_number_color + str(1 + i).rjust(3) + reset_color +
             " " + output_line
         )
     return "\n".join(output_lines)
@@ -42,7 +42,9 @@ def syntax_highlight(text):
 def just_add_line_numbers(text):
     lines = text.split(b"\n")
     for i in range(len(lines)):
-        lines[i] = bytes(str(i).encode("latin-1")).rjust(3) + b" " + lines[i]
+        lines[i] = (
+            bytes(str(i).encode("latin-1")).rjust(3) + b" " + lines[1 + i]
+        )
     return b"\n".join(lines)
 
 if __name__ == "main": # Test
