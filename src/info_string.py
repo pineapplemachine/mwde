@@ -60,10 +60,15 @@ def pretty_info_string(
     conditions = []
     player_faction_name = info_record.prop("player_faction_name", "name")
     if player_faction_name:
-        conditions.append("- If the player is a member of %s" % player_faction_name)
+        conditions.append("- If the player is a member of %s" %
+            player_faction_name.encode("latin-1", "ignore")
+        )
     info_data = info_record.prop("info_data")
     if info_data:
+        dialog_type = info_record.dialog_topic_record.prop("dialog_type", "type")
         disposition = info_data["disposition"]
+        if disposition is not None and dialog_type == 4:
+            conditions.append("- If quest status is %s" % disposition)
         if disposition and disposition > 0:
             conditions.append("- If disposition is at least %s" % disposition)
         gender = info_data["gender"]
@@ -77,7 +82,7 @@ def pretty_info_string(
         player_rank = info_data["player_rank"]
         if player_rank and player_rank > 0:
             conditions.append("- If player rank is at least %s" % player_rank)
-    info_functions = info_data["functions"]
+    info_functions = info_record["functions"]
     if info_functions:
         func_numbers = [
             sub_record for sub_record in info_record.sub_records
@@ -94,9 +99,12 @@ def pretty_info_string(
     conditions_str = b"\n".join(map(
         lambda l: b"  " + bytes(l.encode("latin-1", "ignore")), conditions
     ))
+    es_file_path = os.path.basename(info_record.es_file.path).encode(
+        "latin-1", "ignore"
+    )
     output_str = (
         b"Info ID " + id_number +
-        (b" in \"%s\"\n" % os.path.basename(info_record.es_file.path)) +
+        (b" in \"%s\"\n" % es_file_path) +
         context_str + b"\n" +
         ((conditions_str + b"\n") if conditions_str else b"") +
         b"Response Text:\n" + wrapped_text
@@ -114,33 +122,33 @@ def pretty_info_string(
 def dialog_function_string(function, number_value):
     func_type = function["type"]
     comparison = function["comparison"]
-    variable = function["variable"]
+    variable = function["variable"].encode("latin-1", "ignore")
     comp_string = {
-        "0": "=",
-        "1": "!=",
-        "2": ">",
-        "3": ">=",
-        "4": "<",
-        "5": "<=",
+        b"0": "=",
+        b"1": "!=",
+        b"2": ">",
+        b"3": ">=",
+        b"4": "<",
+        b"5": "<=",
     }.get(comparison, "???")
-    if func_type == "0": # Unused
+    if func_type == b"0": # Unused
         return None
-    if func_type == "1": # Function, e.g. "PC Axe > 1"
+    if func_type == b"1": # Function, e.g. "PC Axe > 1"
         template = "- If function %s %s %s"
         return template % (variable, comp_string, number_value)
-    elif func_type == "2": # Global
+    elif func_type == b"2": # Global
         template = "- If global %s %s %s"
         return template % (variable, comp_string, number_value)
-    elif func_type == "3": # Local
+    elif func_type == b"3": # Local
         template = "- If local %s %s %s"
         return template % (variable, comp_string, number_value)
-    elif func_type == "4": # Journal state
+    elif func_type == b"4": # Journal state
         template = "- If quest %s %s %s"
         return template % (variable, comp_string, number_value)
-    elif func_type == "5": # Item
+    elif func_type == b"5": # Item
         template = "- If player inventory contains %s %s %s"
         return template % (variable, comp_string, number_value)
-    elif func_type == "6": # Dead
+    elif func_type == b"6": # Dead
         if comp_string in ("=", "<=") and number_value == 0:
             return "- If NPC %s is not dead" % variable
         elif comp_string in ("<") and number_value == 1:
@@ -149,7 +157,7 @@ def dialog_function_string(function, number_value):
             return "- If NPC %s has not been killed exactly once" % variable
         template = "- If NPC death count for %s %s %s"
         return template % (variable, comp_string, number_value)
-    elif func_type == "7": # Not ID
+    elif func_type == b"7": # Not ID
         if ((comp_string in ("=", "<=") and number_value == 0) or
             (comp_string in ("!=", "<") and number_value == 1)
         ): return "- If NPC is not %s" % variable
@@ -158,7 +166,7 @@ def dialog_function_string(function, number_value):
         ): return "- If NPC is %s" % variable
         template = "- If not NPC ID %s %s %s"
         return template % (variable, comp_string, number_value)
-    elif func_type == "8": # Not Faction
+    elif func_type == b"8": # Not Faction
         if ((comp_string in ("=", "<=") and number_value == 0) or
             (comp_string in ("!=", "<") and number_value == 1)
         ): return "- If NPC is not a member of faction %s" % variable
@@ -167,7 +175,7 @@ def dialog_function_string(function, number_value):
         ): return "- If NPC is a member of faction %s" % variable
         template = "- If not NPC faction %s %s %s"
         return template % (variable, comp_string, number_value)
-    elif func_type == "9": # Not Class
+    elif func_type == b"9": # Not Class
         if ((comp_string in ("=", "<=") and number_value == 0) or
             (comp_string in ("!=", "<") and number_value == 1)
         ): return "- If NPC is not a member of class %s" % variable
@@ -176,7 +184,7 @@ def dialog_function_string(function, number_value):
         ): return "- If NPC is a member of class %s" % variable
         template = "- If not NPC class %s %s %s"
         return template % (variable, comp_string, number_value)
-    elif func_type == "A": # Not Race
+    elif func_type == b"A": # Not Race
         if ((comp_string in ("=", "<=") and number_value == 0) or
             (comp_string in ("!=", "<") and number_value == 1)
         ): return "- If NPC is not a member of race %s" % variable
@@ -185,7 +193,7 @@ def dialog_function_string(function, number_value):
         ): return "- If NPC is a member of race %s" % variable
         template = "- If not NPC race %s %s %s"
         return template % (variable, comp_string, number_value)
-    elif func_type == "B": # Not Cell
+    elif func_type == b"B": # Not Cell
         if ((comp_string in ("=", "<=") and number_value == 0) or
             (comp_string in ("!=", "<") and number_value == 1)
         ): return "- If NPC is not located in cell %s" % variable
@@ -194,7 +202,7 @@ def dialog_function_string(function, number_value):
         ): return "- If NPC is located in cell %s" % variable
         template = "- If not NPC cell %s %s %s"
         return template % (variable, comp_string, number_value)
-    elif func_type == "C": # Not Local
+    elif func_type == b"C": # Not Local
         template = "- If not local %s %s %s"
         return template % (variable, comp_string, number_value)
     else:
