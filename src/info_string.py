@@ -103,9 +103,19 @@ def pretty_info_string(
     es_file_path = os.path.basename(info_record.es_file.path).encode(
         "latin-1", "ignore"
     )
+    overwrite_str = b""
+    if info_record.overwritten_by_record:
+        overwrite_file = os.path.basename(
+            info_record.overwritten_by_record.es_file.path
+        ).encode("latin-1", "ignore")
+        if len(info_record.overwritten_by_record["DELE"]):
+            overwrite_str = b" (Removed by \"%s\")" % overwrite_file
+        else:
+            overwrite_str = b" (Overwritten by \"%s\")" % overwrite_file
     output_str = (
         b"Info ID " + id_number +
-        (b" in \"%s\"\n" % es_file_path) +
+        (b" in \"%s\"" % es_file_path) +
+        overwrite_str + b"\n" +
         context_str + b"\n" +
         ((conditions_str + b"\n") if conditions_str else b"") +
         b"Response Text:\n" + wrapped_text

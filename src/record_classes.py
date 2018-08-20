@@ -25,14 +25,17 @@ class ESData(object):
             for record in es_file.records:
                 if record.type_name != b"INFO":
                     continue
+                if len(record["DELE"]):
+                    continue # Deletion of dialog from a previous file
                 is_overwritten = False
-                if not include_overwritten:
-                    for later_file in self.es_files[i + 1:]:
-                        if record.id_number in later_file.info_id_map:
-                            is_overwritten = True
-                            break
-                    if is_overwritten:
-                        continue
+                for later_file in self.es_files[i + 1:]:
+                    if record.id_number in later_file.info_id_map:
+                        is_overwritten = True
+                        later_record = later_file.info_id_map[record.id_number]
+                        record.overwritten_by_record = later_record
+                        break
+                if is_overwritten and not include_overwritten:
+                    continue
                 yield record
     def get_record_by_name_id(self, record_name, name_id):
         for es_file in self.es_files:
@@ -121,6 +124,7 @@ class Record(object):
         self.flag_bits = flag_bits
         self.sub_records = sub_records
         self.dialog_topic_record = None # Populated later for INFO records
+        self.overwritten_by_record = None # Populated later for INFO records
     def iter_sub_records_with_name(self, name):
         name_bytes = get_bytes(name)
         for sub_record in self.sub_records:
