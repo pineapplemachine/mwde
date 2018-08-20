@@ -358,9 +358,9 @@ record_type_list.append(RecordType("INFO", "dialog_response", [
     SubRecordType("DATA", "info_data", fields=[
         SubRecordTypeField(4, "unknown_1", data_integer_signed),
         SubRecordTypeField(4, "disposition", data_integer_signed),
-        SubRecordTypeField(1, "faction_rank", data_integer_unsigned),
-        SubRecordTypeField(1, "gender", data_integer_unsigned),
-        SubRecordTypeField(1, "player_faction_rank", data_integer_unsigned),
+        SubRecordTypeField(1, "faction_rank", data_integer_signed),
+        SubRecordTypeField(1, "gender", data_integer_signed),
+        SubRecordTypeField(1, "player_faction_rank", data_integer_signed),
         SubRecordTypeField(1, "unknown_2", data_integer_unsigned),
     ]),
     SubRecordType("ONAM", "actor_name", fields=[
