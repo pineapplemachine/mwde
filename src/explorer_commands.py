@@ -40,7 +40,7 @@ def do_sub(es, config, text, flags):
         print("Starting case-insensitive substring search.\n")
     result_count = 0
     print("begin record search")
-    for record in es.iter_info_records():
+    for record in es.iter_info_records(include_overwritten=flags.get("O")):
         response_text = record.prop("response_text", "text")
         if not response_text: continue
         match_response_text = (
@@ -90,26 +90,25 @@ def do_re(es, config, text, flags):
         return
     print("Starting regular expression search.\n")
     result_count = 0
-    for record in es.iter_records():
-        if record.type_name == b"INFO":
-            response_text = record.prop("response_text", "text")
-            if not response_text: continue
-            matches = list(re.finditer(pattern, response_text))
-            if len(matches) == 0: continue
-            result_count += 1
-            if config.get("substring_highlighting"):
-                for match in matches[::-1]:
-                    index = match.start(0)
-                    high = match.end(0)
-                    response_text = (
-                        response_text[:index] + emphasis +
-                        response_text[index:high] + normal  +
-                        response_text[high:]
-                    )
-            print(pretty_info_string(
-                config, wrapper, record, use_text=response_text,
-                verbose=flags.get("V")
-            ) + "\n")
+    for record in es.iter_info_records(include_overwritten=flags.get("O")):
+        response_text = record.prop("response_text", "text")
+        if not response_text: continue
+        matches = list(re.finditer(pattern, response_text))
+        if len(matches) == 0: continue
+        result_count += 1
+        if config.get("substring_highlighting"):
+            for match in matches[::-1]:
+                index = match.start(0)
+                high = match.end(0)
+                response_text = (
+                    response_text[:index] + emphasis +
+                    response_text[index:high] + normal  +
+                    response_text[high:]
+                )
+        print(pretty_info_string(
+            config, wrapper, record, use_text=response_text,
+            verbose=flags.get("V")
+        ) + "\n")
     print("Finished showing %s results.\n" % result_count)
 
 # Flags:
@@ -133,32 +132,31 @@ def do_npc(es, config, text, flags):
         return
     npc_name = npc_record.prop("name", "name")
     result_count = 0
-    for record in es.iter_records():
-        if record.type_name == b"INFO":
-            actor_name = record.prop("actor_name", "name")
-            race_name = record.prop("race_name", "name")
-            class_name = record.prop("class_name", "name")
-            faction_name = record.prop("faction_name", "name")
-            npc_race = npc_record.prop("race_name", "name")
-            npc_class = npc_record.prop("class_name", "name")
-            npc_faction = npc_record.prop("faction_name", "name")
-            match = False
-            if actor_name and actor_name != npc_name: continue
-            if race_name and race_name != npc_race: continue
-            if class_name and class_name != npc_class: continue
-            if faction_name and faction_name != npc_faction: continue
-            match = (actor_name == npc_name)
-            if not match and flags.get("r"):
-                match = (race_name == npc_race)
-            if not match and flags.get("c"):
-                match = (class_name == npc_class)
-            if not match and flags.get("f"):
-                match = (faction_name == npc_faction)
-            if match:
-                print(pretty_info_string(
-                    config, wrapper, record, verbose=flags.get("V")
-                ).encode("latin-1", "ignore") + "\n")
-                result_count += 1
+    for record in es.iter_info_records(include_overwritten=flags.get("O")):
+        actor_name = record.prop("actor_name", "name")
+        race_name = record.prop("race_name", "name")
+        class_name = record.prop("class_name", "name")
+        faction_name = record.prop("faction_name", "name")
+        npc_race = npc_record.prop("race_name", "name")
+        npc_class = npc_record.prop("class_name", "name")
+        npc_faction = npc_record.prop("faction_name", "name")
+        match = False
+        if actor_name and actor_name != npc_name: continue
+        if race_name and race_name != npc_race: continue
+        if class_name and class_name != npc_class: continue
+        if faction_name and faction_name != npc_faction: continue
+        match = (actor_name == npc_name)
+        if not match and flags.get("r"):
+            match = (race_name == npc_race)
+        if not match and flags.get("c"):
+            match = (class_name == npc_class)
+        if not match and flags.get("f"):
+            match = (faction_name == npc_faction)
+        if match:
+            print(pretty_info_string(
+                config, wrapper, record, verbose=flags.get("V")
+            ).encode("latin-1", "ignore") + "\n")
+            result_count += 1
     print("Finished showing %s results.\n" % result_count)
 
 def do_race(es, config, text, flags):
@@ -174,14 +172,13 @@ def do_race(es, config, text, flags):
         return
     race_name = race_record.prop("name", "name")
     result_count = 0
-    for record in es.iter_records():
-        if record.type_name == b"INFO":
-            info_race_name = record.prop("race_name", "name")
-            if info_race_name == race_name:
-                print(pretty_info_string(
-                    config, wrapper, record, verbose=flags.get("V")
-                ) + "\n")
-                result_count += 1
+    for record in es.iter_info_records(include_overwritten=flags.get("O")):
+        info_race_name = record.prop("race_name", "name")
+        if info_race_name == race_name:
+            print(pretty_info_string(
+                config, wrapper, record, verbose=flags.get("V")
+            ) + "\n")
+            result_count += 1
     print("Finished showing %s results.\n" % result_count)
 
 def do_faction(es, config, text, flags):
@@ -197,14 +194,13 @@ def do_faction(es, config, text, flags):
         return
     faction_name = faction_record.prop("name", "name")
     result_count = 0
-    for record in es.iter_records():
-        if record.type_name == b"INFO":
-            info_faction_name = record.prop("faction_name", "name")
-            if info_faction_name == faction_name:
-                print(pretty_info_string(
-                    config, wrapper, record, verbose=flags.get("V")
-                ) + "\n")
-                result_count += 1
+    for record in es.iter_info_records(include_overwritten=flags.get("O")):
+        info_faction_name = record.prop("faction_name", "name")
+        if info_faction_name == faction_name:
+            print(pretty_info_string(
+                config, wrapper, record, verbose=flags.get("V")
+            ) + "\n")
+            result_count += 1
     print("Finished showing %s results.\n" % result_count)
 
 # Flags:
@@ -218,18 +214,17 @@ def do_cell(es, config, text, flags):
     wrapper.width = get_wrap_width()
     result_count = 0
     lower_text = text.lower()
-    for record in es.iter_records():
-        if record.type_name == b"INFO":
-            cell_name = record.prop("cell_name", "name")
-            if cell_name and ((
-                flags.get("p") and cell_name.lower().startswith(lower_text)
-            ) or (
-                not flags.get("p") and cell_name.lower() == lower_text
-            )):
-                print(pretty_info_string(
-                    config, wrapper, record, verbose=flags.get("V")
-                ) + "\n")
-                result_count += 1
+    for record in es.iter_info_records(include_overwritten=flags.get("O")):
+        cell_name = record.prop("cell_name", "name")
+        if cell_name and ((
+            flags.get("p") and cell_name.lower().startswith(lower_text)
+        ) or (
+            not flags.get("p") and cell_name.lower() == lower_text
+        )):
+            print(pretty_info_string(
+                config, wrapper, record, verbose=flags.get("V")
+            ) + "\n")
+            result_count += 1
     print("Finished showing %s results.\n" % result_count)
 
 def do_topic(es, config, text, flags):
@@ -241,14 +236,13 @@ def do_topic(es, config, text, flags):
     wrapper.width = get_wrap_width()
     result_count = 0
     lower_text = text.lower()
-    for record in es.iter_records():
-        if record.type_name == b"INFO":
-            topic_name = record.dialog_topic_record.prop("name", "name")
-            if topic_name and topic_name.lower().startswith(lower_text):
-                print(pretty_info_string(
-                    config, wrapper, record, verbose=flags.get("V")
-                ) + "\n")
-                result_count += 1
+    for record in es.iter_info_records(include_overwritten=flags.get("O")):
+        topic_name = record.dialog_topic_record.prop("name", "name")
+        if topic_name and topic_name.lower().startswith(lower_text):
+            print(pretty_info_string(
+                config, wrapper, record, verbose=flags.get("V")
+            ) + "\n")
+            result_count += 1
     print("Finished showing %s results.\n" % result_count)
 
 def do_quest(es, config, text, flags):
@@ -260,24 +254,23 @@ def do_quest(es, config, text, flags):
     wrapper.width = get_wrap_width()
     result_count = 0
     lower_text = text.lower()
-    for record in es.iter_records():
-        if record.type_name == b"INFO":
-            match = False
-            for sub_record in record["SCVR"]:
-                if sub_record["variable"].lower() == lower_text:
-                    match = True
-                    break
-            if not match:
-                result_text = record.prop("result_text", "text")
-                if result_text: match = lower_text in result_text.lower()
-            if not match:
-                topic_name = record.dialog_topic_record.prop("name", "name")
-                if topic_name: match = (lower_text == topic_name.lower())
-            if match:
-                print(pretty_info_string(
-                    config, wrapper, record, verbose=flags.get("V")
-                ) + "\n")
-                result_count += 1
+    for record in es.iter_info_records(include_overwritten=flags.get("O")):
+        match = False
+        for sub_record in record["SCVR"]:
+            if sub_record["variable"].lower() == lower_text:
+                match = True
+                break
+        if not match:
+            result_text = record.prop("result_text", "text")
+            if result_text: match = lower_text in result_text.lower()
+        if not match:
+            topic_name = record.dialog_topic_record.prop("name", "name")
+            if topic_name: match = (lower_text == topic_name.lower())
+        if match:
+            print(pretty_info_string(
+                config, wrapper, record, verbose=flags.get("V")
+            ) + "\n")
+            result_count += 1
     print("Finished showing %s results.\n" % result_count)
 
 def do_load(es, config, text, flags):
