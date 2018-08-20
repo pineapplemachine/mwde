@@ -40,33 +40,32 @@ def do_sub(es, config, text, flags):
         print("Starting case-insensitive substring search.\n")
     result_count = 0
     print("begin record search")
-    for record in es.iter_records():
-        if record.type_name == b"INFO":
-            response_text = record.prop("response_text", "text")
-            if not response_text: continue
-            match_response_text = (
-                response_text if case_sensitive else response_text.lower()
-            )
-            index = match_response_text.find(match_text)
-            if index < 0: continue
-            result_count += 1
-            if config.get("substring_highlighting"):
-                indexes = [index]
-                while True:
-                    index = match_response_text.find(match_text, index + len(text))
-                    if index < 0: break
-                    indexes.insert(0, index)
-                for index in indexes:
-                    high = index + len(text)
-                    response_text = (
-                        response_text[:index] + emphasis +
-                        response_text[index:high] + normal  +
-                        response_text[high:]
-                    )
-            print(pretty_info_string(
-                config, wrapper, record, use_text=response_text,
-                verbose=flags.get("V")
-            ) + "\n")
+    for record in es.iter_info_records():
+        response_text = record.prop("response_text", "text")
+        if not response_text: continue
+        match_response_text = (
+            response_text if case_sensitive else response_text.lower()
+        )
+        index = match_response_text.find(match_text)
+        if index < 0: continue
+        result_count += 1
+        if config.get("substring_highlighting"):
+            indexes = [index]
+            while True:
+                index = match_response_text.find(match_text, index + len(text))
+                if index < 0: break
+                indexes.insert(0, index)
+            for index in indexes:
+                high = index + len(text)
+                response_text = (
+                    response_text[:index] + emphasis +
+                    response_text[index:high] + normal  +
+                    response_text[high:]
+                )
+        print(pretty_info_string(
+            config, wrapper, record, use_text=response_text,
+            verbose=flags.get("V")
+        ) + "\n")
     print("Finished showing %s results.\n" % result_count)
 
 # Flags:

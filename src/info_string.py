@@ -1,3 +1,5 @@
+import os
+
 from syntax_highlight import syntax_highlight, just_add_line_numbers
 
 # Get a pretty string from an INFO record
@@ -93,7 +95,8 @@ def pretty_info_string(
         lambda l: b"  " + bytes(l.encode("latin-1", "ignore")), conditions
     ))
     output_str = (
-        b"Info ID " + id_number + b"\n" +
+        b"Info ID " + id_number +
+        (b" in \"%s\"\n" % os.path.basename(info_record.es_file.path)) +
         context_str + b"\n" +
         ((conditions_str + b"\n") if conditions_str else b"") +
         b"Response Text:\n" + wrapped_text

@@ -19,23 +19,17 @@ def read_elder_scrolls_paths(*paths):
     return ESData(es_file_list)
 
 def read_elder_scrolls_file(path, binary_file):
-    record_list = []
+    es_file = ESFile(path, [])
     while True:
-        record = read_record(binary_file)
+        record = read_record(es_file, binary_file)
         if record:
-            record_list.append(record)
+            es_file.records.append(record)
         else:
             break
-    # Associate INFO records with their preceding DIAL records
-    last_dialog_topic_record = None
-    for record in record_list:
-        if record.type_name == b"DIAL":
-            last_dialog_topic_record = record
-        elif record.type_name == b"INFO":
-            record.dialog_topic_record = last_dialog_topic_record
-    return ESFile(path, record_list)
+    es_file.process_info_records()
+    return es_file
 
-def read_record(binary_file):
+def read_record(es_file, binary_file):
     # Read header data
     name = binary_file.read(4)
     if len(name) == 0: return None
@@ -65,6 +59,7 @@ def read_record(binary_file):
             sub_record_list.append(sub_record)
     # Build and return a Record object
     return Record(
+        es_file=es_file,
         record_type=record_type,
         record_type_name=name,
         unknown_flag=unknown_flag,

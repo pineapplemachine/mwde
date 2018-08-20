@@ -18,6 +18,21 @@ class ESData(object):
         for es_file in self.es_files:
             for record in es_file.records:
                 yield record
+    def iter_info_records(self):
+        num_files = len(self.es_files)
+        for i in range(num_files):
+            es_file = self.es_files[i]
+            for record in es_file.records:
+                if record.type_name != b"INFO":
+                    continue
+                is_overwritten = False
+                for later_file in self.es_files[i + 1:]:
+                    if record.id_number in later_file.info_id_map:
+                        is_overwritten = True
+                        break
+                if is_overwritten:
+                    continue
+                yield record
     def get_record_by_name_id(self, record_name, name_id):
         for es_file in self.es_files:
             record = es_file.get_record_by_name_id(record_name, name_id)
@@ -40,9 +55,26 @@ class ESData(object):
         self.es_files.append(es_file)
 
 class ESFile(object):
-    def __init__(self, path, records):
+    def __init__(self, path, records, info_id_map=None):
         self.path = path
         self.records = records
+        self.info_id_map = info_id_map if info_id_map else {}
+    # Associate INFO records with their preceding DIAL records
+    # Build a map of INFO by ID, this will be used by ESData to detect
+    # records from this ESM overwritten in one later in the load order
+    def process_info_records(self):
+        last_dialog_topic_record = None
+        for record in self.records:
+            if record.type_name == b"DIAL":
+                last_dialog_topic_record = record
+            elif record.type_name == b"INFO":
+                record.dialog_topic_record = last_dialog_topic_record
+                id_number_string = record.prop("info_id", "info_id")
+                if id_number_string:
+                    record.id_number = int(id_number_string)
+                    self.info_id_map[record.id_number] = record
+                else:
+                    record.id_number = None
     def get_record_by_name_id(self, record_name, name_id):
         record_name_bytes = get_bytes(record_name)
         name_id_bytes = get_bytes(name_id)
@@ -78,13 +110,16 @@ class ESFile(object):
 
 class Record(object):
     def __init__(self,
-        record_type, record_type_name, unknown_flag, flag_bits, sub_records
+        es_file, record_type, record_type_name,
+        unknown_flag, flag_bits, sub_records
     ):
+        self.es_file = es_file
         self.type = record_type
         self.type_name = get_bytes(record_type_name)
         self.unknown_flag = unknown_flag
         self.flag_bits = flag_bits
         self.sub_records = sub_records
+        self.dialog_topic_record = None # Populated later for INFO records
     def iter_sub_records_with_name(self, name):
         name_bytes = get_bytes(name)
         for sub_record in self.sub_records:
