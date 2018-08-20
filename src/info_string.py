@@ -1,6 +1,7 @@
 import os
 
 from syntax_highlight import syntax_highlight, just_add_line_numbers
+from function_type_names import dialog_function_type_names
 
 # Get a pretty string from an INFO record
 def pretty_info_string(
@@ -135,7 +136,8 @@ def dialog_function_string(function, number_value):
         return None
     if func_type == b"1": # Function, e.g. "PC Axe > 1"
         template = "- If function %s %s %s"
-        return template % (variable, comp_string, number_value)
+        func_name = dialog_function_type_names[function["function"]]
+        return template % (func_name, comp_string, number_value)
     elif func_type == b"2": # Global
         template = "- If global %s %s %s"
         return template % (variable, comp_string, number_value)
