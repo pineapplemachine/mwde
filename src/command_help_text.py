@@ -44,6 +44,7 @@ Show all dialog text that includes a substring.
     sub <text>
 Options:
     sub -i  ... Case-sensitive (default insensitive)
+    sub -O  ... Display dialog overwritten by a later file
     sub -V  ... Display more info about responses
 Examples:
     sub Ald Daedroth
@@ -58,6 +59,7 @@ Options:
     re -i  ... Case-insensitive (default sensitive)
     re -s  ... Single line (affects . metacharacter)
     re -m  ... Multi-line (affects ^ and $ metacharacters)
+    re -O  ... Display dialog overwritten by a later file
     re -V  ... Display more info about responses
 Examples:
     re (color|colour)\b
@@ -70,6 +72,7 @@ Options:
     npc -r  ... Include dialog general to NPC's race
     npc -c  ... Include dialog general to NPC's class
     npc -f  ... Include dialog general to NPC's faction
+    npc -O  ... Display dialog overwritten by a later file
     npc -V  ... Display more info about responses
 Examples:
     npc Vianis Tiragrius
@@ -84,6 +87,7 @@ Examples:
     race altmer
     race dark elf
 Options:
+    race -O  ... Display dialog overwritten by a later file
     race -V  ... Display more info about responses
 """.strip()
 
@@ -94,6 +98,7 @@ Examples:
     faction Telvanni
     faction great house hlaalu
 Options:
+    faction -O  ... Display dialog overwritten by a later file
     faction -V  ... Display more info about responses
 """.strip()
  
@@ -106,6 +111,7 @@ Examples:
     cell -p Vivec
 Options:
     cell -p  ... Match cell names starting with the input
+    cell -O  ... Display dialog overwritten by a later file
     cell -V  ... Display more info about responses
 """.strip()
 
@@ -115,6 +121,7 @@ Show all dialog responses belonging to a certain topic.
 Examples:
     topic alchemy
 Options:
+    topic -O  ... Display dialog overwritten by a later file
     topic -V  ... Display more info about responses
 """.strip()
 
@@ -125,6 +132,7 @@ quest.
 Examples:
     quest FG_SilenceMagistrate
 Options:
+    quest -O  ... Display dialog overwritten by a later file
     quest -V  ... Display more info about responses
 """.strip()
 
