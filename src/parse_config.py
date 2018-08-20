@@ -17,6 +17,11 @@ def parse_config(config_path):
         config_object["script_syntax_highlighting"] = (
             value and value != "no" and value != "false"
         )
+    if config_parser.has_option("colors", "function_colors"):
+        value = config_parser.get("colors", "function_colors")[-1].lower()
+        config_object["info_function_highlighting"] = (
+            value and value != "no" and value != "false"
+        )
     if config_parser.has_option("load_file_paths", "paths"):
         config_object["load_paths"] = list(filter(None, (
             config_parser.get("load_file_paths", "paths").split("\n")

@@ -21,6 +21,7 @@ arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument("--no-colors", action="store_true")
 arg_parser.add_argument("--script-colors", action="store_true")
 arg_parser.add_argument("--substring-colors", action="store_true")
+arg_parser.add_argument("--function-colors", action="store_true")
 arg_parser.add_argument("--load-paths", type=str, nargs="+")
 arg_parser.add_argument("--config-path", type=str)
 args = arg_parser.parse_args()
@@ -29,9 +30,12 @@ if args.script_colors:
     config["script_syntax_highlighting"] = True
 if args.substring_colors:
     config["substring_highlighting"] = True
+if args.function_colors:
+    config["info_function_highlighting"] = True
 if args.no_colors:
     config["substring_highlighting"] = False
     config["script_syntax_highlighting"] = False
+    config["info_function_highlighting"] = False
 
 config_path = "config.ini"
 if args.config_path:
