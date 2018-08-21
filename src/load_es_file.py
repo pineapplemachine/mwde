@@ -23,6 +23,8 @@ def read_elder_scrolls_file(path, binary_file):
     while True:
         record = read_record(es_file, binary_file)
         if record:
+            if not len(es_file.records) and record.type_name != b"TES3":
+                raise Exception("File is not a TES3 ESM or ESP.")
             es_file.records.append(record)
         else:
             break
