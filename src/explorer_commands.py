@@ -155,7 +155,7 @@ def do_npc(es, config, text, flags):
         if match:
             print(pretty_info_string(
                 config, wrapper, record, verbose=flags.get("V")
-            ).encode("latin-1", "ignore") + "\n")
+            ) + "\n")
             result_count += 1
     print("Finished showing %s results.\n" % result_count)
 

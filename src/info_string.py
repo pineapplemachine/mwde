@@ -77,7 +77,7 @@ def pretty_info_string(
     player_faction_name = info_record.prop("player_faction_name", "name")
     if player_faction_name:
         conditions.append("- If the player is a member of %s" %
-            player_faction_name.encode("latin-1", "ignore")
+            player_faction_name.decode("latin-1", "ignore")
         )
     info_data = info_record.prop("info_data")
     if info_data:
@@ -173,7 +173,7 @@ def common_dialog_function_string(
 def dialog_function_string(config, function, number_value):
     func_type = function["type"]
     comparison = function["comparison"]
-    variable = function["variable"].encode("latin-1", "ignore")
+    variable = function["variable"].decode("latin-1")
     comp_string = {
         b"0": "=",
         b"1": "!=",
