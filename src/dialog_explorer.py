@@ -13,6 +13,13 @@ from load_es_file import read_elder_scrolls_file
 from explorer_commands import *
 from command_help_text import *
 
+# https://docs.python.org/2/library/readline.html
+# https://stackoverflow.com/a/15416166/4099022
+try:
+    import readline
+except ImportError:
+    pass
+
 
 
 config = {}
