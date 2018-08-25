@@ -75,11 +75,21 @@ def pretty_info_string(
     # Build a list of "If <condition>" strings...
     conditions = []
     player_faction_name = info_record.prop("player_faction_name", "name")
-    if player_faction_name:
-        conditions.append("- If the player is a member of %s" %
+    info_data = info_record.prop("info_data")
+    player_faction_rank = info_data["player_faction_rank"] if info_data else None
+    if player_faction_name and player_faction_rank == 0:
+        conditions.append("- If player is not a member of faction %s" %
             player_faction_name.decode("latin-1", "ignore")
         )
-    info_data = info_record.prop("info_data")
+    elif player_faction_name and player_faction_rank is not None:
+        conditions.append("- If player rank in faction %s is %s" % (
+            player_faction_name.decode("latin-1", "ignore"),
+            pretty_number(config, player_faction_rank),
+        ))
+    elif player_faction_name:
+        conditions.append("- If player is a member of faction %s" %
+            player_faction_name.decode("latin-1", "ignore")
+        )
     if info_data:
         disposition = info_data["disposition"]
         if disposition is not None and dialog_type == 4:
@@ -99,11 +109,6 @@ def pretty_info_string(
         if faction_rank and faction_rank > 0:
             conditions.append("- If NPC rank is at least %s" %
                 pretty_number(config, faction_rank)
-            )
-        player_rank = info_data["player_rank"]
-        if player_rank and player_rank > 0:
-            conditions.append("- If player rank is at least %s" %
-                pretty_number(config, player_rank)
             )
     info_functions = info_record["functions"]
     if info_functions:
