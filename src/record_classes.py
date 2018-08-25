@@ -37,14 +37,30 @@ class ESData(object):
                 if is_overwritten and not include_overwritten:
                     continue
                 yield record
+    def get_faction_rank_name(self, faction_name, rank_index):
+        if rank_index < 0:
+            return None
+        faction_record = self.get_record_by_name_id(b"FACT", faction_name)
+        if faction_record:
+            rank_names = faction_record[b"RNAM"]
+            if rank_index < len(rank_names):
+                return rank_names[rank_index][0].value
+            else:
+                return None
     def get_record_by_name_id(self, record_name, name_id):
-        for es_file in self.es_files:
+        for es_file in self.es_files[::-1]:
             record = es_file.get_record_by_name_id(record_name, name_id)
             if record:
                 return record
         return None
+    def get_info_record_by_id(self, info_id):
+        for es_file in self.es_files[::-1]:
+            record = es_file.get_info_record_by_id(info_id)
+            if record:
+                return record
+        return None
     def get_record_by_name_input(self, record_name, name_input):
-        for es_file in self.es_files:
+        for es_file in self.es_files[::-1]:
             record = es_file.get_record_by_name_input(record_name, name_input)
             if record:
                 return record
@@ -63,10 +79,12 @@ class ESFile(object):
         self.path = path
         self.records = records
         self.info_id_map = info_id_map if info_id_map else {}
+        self.record_name_map = {}
     # Associate INFO records with their preceding DIAL records
     # Build a map of INFO by ID, this will be used by ESData to detect
     # records from this ESM overwritten in one later in the load order
-    def process_info_records(self):
+    # Map various records by name
+    def process_data(self):
         last_dialog_topic_record = None
         for record in self.records:
             if record.type_name == b"DIAL":
@@ -79,17 +97,18 @@ class ESFile(object):
                     self.info_id_map[record.id_number] = record
                 else:
                     record.id_number = None
+            elif record.type_name in (b"FACT", b"NPC_", b"CELL"):
+                name_record = record.prop(b"NAME")
+                if name_record:
+                    self.record_name_map[name_record[0].value] = record
     def get_record_by_name_id(self, record_name, name_id):
         record_name_bytes = get_bytes(record_name)
         name_id_bytes = get_bytes(name_id)
-        for record in self.records:
-            if record.type_name == record_name_bytes or (
-                record.type and record.type.long_name == record_name
-            ):
-                name_sub_record = record["NAME"]
-                if name_sub_record and name_sub_record[0] == name_id_bytes:
-                    return record
-        return None
+        record = self.record_name_map.get(name_id_bytes)
+        if record and (record.type_name == record_name_bytes or (
+            record.type and record.type.long_name == record_name
+        )):
+            return record
     def get_record_by_name_input(self, record_name, name_input):
         record_name_bytes = get_bytes(record_name)
         name_input_bytes = get_bytes(name_input)
@@ -102,6 +121,8 @@ class ESFile(object):
                 if id_name == name_input_bytes or str_name == name_input_bytes:
                     return record
         return None
+    def get_info_record_by_id(self, info_id):
+        return self.info_id_map.get(info_id)
     def iter_records_with_name(self, name):
         name_bytes = get_bytes(name)
         for record in self.records:

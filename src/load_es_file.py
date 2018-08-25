@@ -28,7 +28,7 @@ def read_elder_scrolls_file(path, binary_file):
             es_file.records.append(record)
         else:
             break
-    es_file.process_info_records()
+    es_file.process_data()
     return es_file
 
 def read_record(es_file, binary_file):

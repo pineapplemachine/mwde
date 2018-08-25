@@ -123,23 +123,23 @@ record_type_list.append(RecordType("FACT", "faction", [
     SubRecordType("RNAM", "rank_names", fields=[
         SubRecordTypeField(32, "name", data_string_padded),
     ]),
-    SubRecordType("FADT", "faction_data", fields=[
-        SubRecordTypeField(4, "attribute_id_1", data_integer_signed),
-        SubRecordTypeField(4, "attribute_id_2", data_integer_signed),
-    ] + SubRecordTypeField.repeat(10, [
-        SubRecordTypeField(4, "rank_attribute_1", data_integer_signed),
-        SubRecordTypeField(4, "rank_attribute_2", data_integer_signed),
-        SubRecordTypeField(4, "rank_skill_1", data_integer_signed),
-        SubRecordTypeField(4, "rank_skill_2", data_integer_signed),
-        SubRecordTypeField(4, "rank_reputation", data_integer_signed),
-    ]) + SubRecordTypeField.repeat(6, [
-        SubRecordTypeField(4, "favored_skill_id", data_integer_signed),
-    ]) + [
-        SubRecordTypeField(4, "unknown_1", data_integer_signed),
-        SubRecordTypeField(4, "flags", data_flags([
-            (0x01, "hidden_from_player"),
-        ])),
-    ]),
+    # SubRecordType("FADT", "faction_data", fields=[
+    #     SubRecordTypeField(4, "attribute_id_1", data_integer_signed),
+    #     SubRecordTypeField(4, "attribute_id_2", data_integer_signed),
+    # ] + SubRecordTypeField.repeat(10, [
+    #     SubRecordTypeField(4, "rank_attribute_1", data_integer_signed),
+    #     SubRecordTypeField(4, "rank_attribute_2", data_integer_signed),
+    #     SubRecordTypeField(4, "rank_skill_1", data_integer_signed),
+    #     SubRecordTypeField(4, "rank_skill_2", data_integer_signed),
+    #     SubRecordTypeField(4, "rank_reputation", data_integer_signed),
+    # ]) + SubRecordTypeField.repeat(6, [
+    #     SubRecordTypeField(4, "favored_skill_id", data_integer_signed),
+    # ]) + [
+    #     SubRecordTypeField(4, "unknown_1", data_integer_signed),
+    #     SubRecordTypeField(4, "flags", data_flags([
+    #         (0x01, "hidden_from_player"),
+    #     ])),
+    # ]),
     SubRecordType("ANAM", "faction_reaction_names", fields=[
         SubRecordTypeField("s", "faction_name", data_string_exact),
     ]),

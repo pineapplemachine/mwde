@@ -1,4 +1,5 @@
 import os
+import re
 
 from syntax_highlight import syntax_highlight, just_add_line_numbers
 from function_type_names import dialog_function_type_names
@@ -6,18 +7,24 @@ from function_type_names import dialog_function_type_names
 reset_color = "\033[0m"
 function_color = "\033[95m"
 number_color = "\033[93m"
+string_color = "\033[92m"
 comparison_color = "\033[37m"
 
-# Helper
+# Helpers
 def pretty_number(config, value):
     if config.get("info_function_highlighting"):
         return number_color + str(value) + reset_color
     else:
         return str(value)
+def pretty_string(config, value):
+    if config.get("info_function_highlighting"):
+        return string_color + "\"" + str(value) + "\"" + reset_color
+    else:
+        return "\"%s\"" % str(value)
 
 # Get a pretty string from an INFO record
 def pretty_info_string(
-    config, wrapper, info_record,
+    config, wrapper, es, info_record,
     use_text=None, show_topic=True, verbose=False
 ):
     dialog_type = info_record.dialog_topic_record.prop("dialog_type", "type")
@@ -81,10 +88,16 @@ def pretty_info_string(
         conditions.append("- If player is not a member of faction %s" %
             player_faction_name.decode("latin-1", "ignore")
         )
-    elif player_faction_name and player_faction_rank is not None:
-        conditions.append("- If player rank in faction %s is %s" % (
+    elif (player_faction_name and player_faction_rank > 0 and
+        player_faction_rank is not None
+    ):
+        rank_name = es.get_faction_rank_name(
+            player_faction_name, player_faction_rank
+        )
+        conditions.append("- If player rank in faction %s is %s%s" % (
             player_faction_name.decode("latin-1", "ignore"),
             pretty_number(config, player_faction_rank),
+            " (%s)" % rank_name.decode("latin-1", "ignore") if rank_name else ""
         ))
     elif player_faction_name:
         conditions.append("- If player is a member of faction %s" %
@@ -107,9 +120,19 @@ def pretty_info_string(
             conditions.append("- If NPC gender is female")
         faction_rank = info_data["faction_rank"]
         if faction_rank and faction_rank > 0:
-            conditions.append("- If NPC rank is at least %s" %
-                pretty_number(config, faction_rank)
-            )
+            actor_name = info_record.prop("actor_name", "name")
+            faction_name = info_record.prop("faction_name", "name")
+            rank_name = None
+            if actor_name and not faction_name:
+                actor_record = es.get_record_by_name_id(b"NPC_", actor_name)
+                if actor_record:
+                    faction_name = actor_record.prop("faction_name", "name")
+            if faction_name:
+                rank_name = es.get_faction_rank_name(faction_name, faction_rank)
+            conditions.append("- If NPC rank is at least %s%s" % (
+                pretty_number(config, faction_rank),
+                " (%s)" % rank_name.decode("latin-1") if rank_name else ""
+            ))
     info_functions = info_record["functions"]
     if info_functions:
         func_numbers = [
@@ -119,8 +142,11 @@ def pretty_info_string(
         for i in range(len(info_functions)):
             function = info_functions[i]
             number = func_numbers[i][0].value if i < len(func_numbers) else 0
-            func_string = dialog_function_string(config, function, number)
-            if func_string: conditions.append(func_string)
+            func_string = dialog_function_string(
+                config, es, info_record, function, number
+            )
+            if func_string:
+                conditions.append(func_string)
     # Put it all together
     id_number = info_record.prop("info_id", "info_id")
     result_text = info_record.prop("result_text", "text")
@@ -175,8 +201,9 @@ def common_dialog_function_string(
         )
 
 # Takes an SCVR sub-record and the value of the corresponding INTV or FLTV
-def dialog_function_string(config, function, number_value):
+def dialog_function_string(config, es, info_record, function, number_value):
     func_type = function["type"]
+    func_id = function["function"]
     comparison = function["comparison"]
     variable = function["variable"].decode("latin-1")
     comp_string = {
@@ -190,7 +217,32 @@ def dialog_function_string(config, function, number_value):
     if func_type == b"0": # Unused
         return None
     if func_type == b"1": # Function, e.g. "PC Axe > 1"
-        func_name = dialog_function_type_names[function["function"]]
+        func_name = dialog_function_type_names[func_id]
+        if func_id == b"38": # Player Gender
+            return common_dialog_function_string(config, "function",
+                func_name, comp_string, number_value
+            ) + " (%s)" % ("female" if number_value else "male")
+        elif func_id == b"39": # Player Expelled From NPC Faction
+            actor_name = info_record.prop("actor_name", "name")
+            faction_name = info_record.prop("faction_name", "name")
+            if actor_name and not faction_name:
+                actor_record = es.get_record_by_name_id(b"NPC_", actor_name)
+                if actor_record:
+                    faction_name = actor_record.prop("faction_name", "name")
+            if faction_name:
+                return common_dialog_function_string(config, "function",
+                    func_name, comp_string, number_value
+                ) + (" (%s)" %
+                    faction_name.decode("latin-1")
+                )
+        elif func_id == b"50": # Previous Dialog Choice
+            choice_name = get_dialog_choice_name(es, info_record, number_value)
+            if choice_name:
+                return common_dialog_function_string(config, "function",
+                    func_name, comp_string, number_value
+                ) + "\n  - Choice: %s" % (
+                    pretty_string(config, choice_name)
+                )
         return common_dialog_function_string(config, "function",
             func_name, comp_string, number_value
         )
@@ -276,3 +328,25 @@ def dialog_function_string(config, function, number_value):
         )
     else:
         raise ValueError("Unknown function type.")
+
+dialog_choice_pattern = re.compile(r'"(.*?)"\s*(\d+)')
+def get_dialog_choice_name(es, info_record, choice_number):
+    on_record = info_record
+    while on_record and on_record.type_name == b"INFO":
+        next_info_id = on_record.prop("next_id", "info_id")
+        if not next_info_id: return None
+        next_info = es.get_info_record_by_id(int(next_info_id))
+        if not next_info: return None
+        on_record = next_info
+        result_text = on_record.prop("result_text", "text")
+        if not result_text: continue
+        result_lines = result_text.decode("latin-1").split("\n")
+        for line in result_lines:
+            if line.strip().lower().startswith("choice"):
+                for match in re.finditer(dialog_choice_pattern, line):
+                    number = int(match.group(2))
+                    if number == choice_number:
+                        return match.group(1)
+                return None
+                
+                

@@ -63,7 +63,7 @@ def do_sub(es, config, text, flags):
                     response_text[high:]
                 )
         print(pretty_info_string(
-            config, wrapper, record, use_text=response_text,
+            config, wrapper, es, record, use_text=response_text,
             verbose=flags.get("V")
         ) + "\n")
     print("Finished showing %s results.\n" % result_count)
@@ -106,7 +106,7 @@ def do_re(es, config, text, flags):
                     response_text[high:]
                 )
         print(pretty_info_string(
-            config, wrapper, record, use_text=response_text,
+            config, wrapper, es, record, use_text=response_text,
             verbose=flags.get("V")
         ) + "\n")
     print("Finished showing %s results.\n" % result_count)
@@ -154,7 +154,7 @@ def do_npc(es, config, text, flags):
             match = (faction_name == npc_faction)
         if match:
             print(pretty_info_string(
-                config, wrapper, record, verbose=flags.get("V")
+                config, wrapper, es, record, verbose=flags.get("V")
             ) + "\n")
             result_count += 1
     print("Finished showing %s results.\n" % result_count)
@@ -176,7 +176,7 @@ def do_race(es, config, text, flags):
         info_race_name = record.prop("race_name", "name")
         if info_race_name == race_name:
             print(pretty_info_string(
-                config, wrapper, record, verbose=flags.get("V")
+                config, wrapper, es, record, verbose=flags.get("V")
             ) + "\n")
             result_count += 1
     print("Finished showing %s results.\n" % result_count)
@@ -198,7 +198,7 @@ def do_faction(es, config, text, flags):
         info_faction_name = record.prop("faction_name", "name")
         if info_faction_name == faction_name:
             print(pretty_info_string(
-                config, wrapper, record, verbose=flags.get("V")
+                config, wrapper, es, record, verbose=flags.get("V")
             ) + "\n")
             result_count += 1
     print("Finished showing %s results.\n" % result_count)
@@ -222,7 +222,7 @@ def do_cell(es, config, text, flags):
             not flags.get("p") and cell_name.lower() == lower_text
         )):
             print(pretty_info_string(
-                config, wrapper, record, verbose=flags.get("V")
+                config, wrapper, es, record, verbose=flags.get("V")
             ) + "\n")
             result_count += 1
     print("Finished showing %s results.\n" % result_count)
@@ -240,7 +240,7 @@ def do_topic(es, config, text, flags):
         topic_name = record.dialog_topic_record.prop("name", "name")
         if topic_name and topic_name.lower().startswith(lower_text):
             print(pretty_info_string(
-                config, wrapper, record, verbose=flags.get("V")
+                config, wrapper, es, record, verbose=flags.get("V")
             ) + "\n")
             result_count += 1
     print("Finished showing %s results.\n" % result_count)
@@ -268,7 +268,7 @@ def do_quest(es, config, text, flags):
             if topic_name: match = (lower_text == topic_name.lower())
         if match:
             print(pretty_info_string(
-                config, wrapper, record, verbose=flags.get("V")
+                config, wrapper, es, record, verbose=flags.get("V")
             ) + "\n")
             result_count += 1
     print("Finished showing %s results.\n" % result_count)
