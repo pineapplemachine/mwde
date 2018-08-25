@@ -43,50 +43,6 @@ def just_add_line_numbers(text):
     lines = text.split(b"\n")
     for i in range(len(lines)):
         lines[i] = (
-            bytes(str(i).encode("latin-1")).rjust(3) + b" " + lines[1 + i]
+            bytes(str(1 + i).encode("latin-1")).rjust(3) + b" " + lines[i]
         )
     return b"\n".join(lines)
-
-if __name__ == "main": # Test
-    print(syntax_highlight("""
-begin TrickChestScript
-    short OpenAttempt
-
-        ; Check for the player attempting to open the chest. Use the OpenAttempt variable as
-        ; putting all the code into the OnActivate if statement becomes difficult for more
-        ; complex scripts.
-    if ( OnActivate == 1 )
-        set OpenAttempt to 1
-    end if
-
-        ; Stop the script if not trying to open the chest
-    if ( OpenAttempt == 0 )
-        return
-    endif
-
-        ; Check the player for the 'secret' key, which is 10 pillows
-    if ( player->GetItemCount, "misc_uni_pillow_01" >= 10 )
-
-        Activate        ; Open the container normally
-        Set OpenAttempt to 0
-        MessageBox, "The chest opens mysteriously..."
-
-        ; The player doesn't have 10 pillows, activate trap
-    else
-        PlaySound3D, "Heavy Armor Hit"      ; Play ominous sound
-        Set OpenAttempt to 0
-
-            ; Cast trap on player depending on level
-        if ( player->GetLevel < 10 )
-            Cast, "poisontrap_10", Player
-        elseif ( player->GetLevel < 25 )
-            Cast, "poisontrap_50", Player
-        elseif ( player->GetLevel < 50 )
-            Cast, "poisontrap_150", Player
-        else
-            Cast, "poisontrap_250", Player
-        endif
-        
-    endif
-end    
-    """.strip()))

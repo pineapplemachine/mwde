@@ -10,6 +10,7 @@ Third release of MWDE.
 - Add faction rank names to some dialog conditions that only showed numbers
 - Add dialog choice text to dialog condition list when relevant and available
 - Fix issue displaying player faction requirements in dialog conditions
+- Fix issue -V displaying dialog with scripts when script colors are off
 
 ## v1.1 - "Bal Fell" - 21 August 2018
 
