@@ -1,5 +1,6 @@
 import os
 import shutil
+import zipfile
 
 version = "v1.2"
 
@@ -15,5 +16,12 @@ shutil.copyfile("../Morrowind Dialog Explorer.bat", os.path.join(output_dir, "Mo
 shutil.copyfile("../config.ini", os.path.join(output_dir, "config.ini"))
 shutil.copyfile("../LICENSE", os.path.join(output_dir, "LICENSE"))
 shutil.copyfile("../readme.md", os.path.join(output_dir, "readme.md"))
+
+print("Compressing...")
+
+with zipfile.ZipFile(output_dir + ".zip", "w", zipfile.ZIP_DEFLATED) as zfile:
+    for root, dirs, file_names in os.walk(output_dir):
+        for file_name in file_names:
+            zfile.write(os.path.join(root, file_name))
 
 print("Done.")
