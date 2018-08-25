@@ -9,6 +9,8 @@ from load_es_file import read_elder_scrolls_file
 
 normal = b"\033[0m"
 emphasis = b"\033[42m"
+cell_color = b"\033[96m"
+region_color = b"\033[92m"
 
 wrapper = TextWrapper(
     initial_indent="    ",
@@ -284,6 +286,14 @@ def do_npcat(es, config, text, flags):
     wrapper.width = get_wrap_width()
     result_count = 0
     lower_text = text.lower()
+    cell_str = (
+        cell_color + "Cell:" + normal if config.get("npcat_list_highlighting")
+        else "Cell:"
+    )
+    region_str = (
+        region_color + "Region:" + normal if config.get("npcat_list_highlighting")
+        else "Region:"
+    )
     for record in es.iter_records():
         if record.type_name != b"CELL": continue
         cell_name = record.prop("name", "name")
@@ -311,19 +321,20 @@ def do_npcat(es, config, text, flags):
                 if not cell_name and not region_name:
                     continue
                 elif cell_name and region_name:
-                    print("Found: %s  Cell: %s @ Region: %s" % (
+                    print("Found: %s  %s %s / %s %s" % (
                         contained_record.prop("name", "name").decode("latin-1"),
-                        cell_name.decode("latin-1"), region_name.decode("latin-1")
+                        cell_str, cell_name.decode("latin-1"),
+                        region_str, region_name.decode("latin-1"),
                     ))
                 elif cell_name:
-                    print("Found: %s  Cell: %s" % (
+                    print("Found: %s  %s %s" % (
                         contained_record.prop("name", "name").decode("latin-1"),
-                        cell_name.decode("latin-1")
+                        cell_str, cell_name.decode("latin-1"),
                     ))
                 elif region_name:
-                    print("Found: %s  Region: %s" % (
+                    print("Found: %s  %s %s" % (
                         contained_record.prop("name", "name").decode("latin-1"),
-                        region_name.decode("latin-1")
+                        region_str, region_name.decode("latin-1"),
                     ))
                 result_count += 1
     if result_count: print("")
