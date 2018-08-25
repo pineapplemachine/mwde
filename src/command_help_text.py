@@ -17,6 +17,7 @@ more information about a particular command.
     faction
     cell
     topic
+    journal
     quest
     npcat
     load
@@ -126,14 +127,14 @@ Options:
     topic -V  ... Display more info about responses
 """.strip()
 
-npcat_help_text = """
-List all NPCs in a cell or region.
-    npcat <name>
+journal_help_text = """
+Show journal text that pertains to a quest.
+    quest <name>
 Examples:
-    npcat Sadrith Mora, Wolverine Hall: Mage's Guild
-    npcat -p Vivec
+    quest FG_SilenceMagistrate
 Options:
-    npcat -p  ... Match partial cell and region names
+    quest -O  ... Display dialog overwritten by a later file
+    quest -V  ... Display more info about responses
 """.strip()
 
 quest_help_text = """
@@ -145,6 +146,16 @@ Examples:
 Options:
     quest -O  ... Display dialog overwritten by a later file
     quest -V  ... Display more info about responses
+""".strip()
+
+npcat_help_text = """
+List all NPCs in a cell or region.
+    npcat <name>
+Examples:
+    npcat Sadrith Mora, Wolverine Hall: Mage's Guild
+    npcat -p Vivec
+Options:
+    npcat -p  ... Match partial cell and region names
 """.strip()
 
 load_help_text = """

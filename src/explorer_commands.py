@@ -279,6 +279,24 @@ def do_quest(es, config, text, flags):
             result_count += 1
     print("Finished showing %s results.\n" % result_count)
 
+def do_journal(es, config, text, flags):
+    text = bytes(text.encode("latin-1", "ignore"))
+    if len(text) == 0:
+        print("Must provide a quest name.\n")
+        return
+    print("Starting journal search.\n")
+    wrapper.width = get_wrap_width()
+    result_count = 0
+    lower_text = text.lower()
+    for record in es.iter_info_records(include_overwritten=flags.get("O")):
+        topic_name = record.dialog_topic_record.prop("name", "name")
+        if lower_text == topic_name.lower():
+            print(pretty_info_string(
+                config, wrapper, es, record, verbose=flags.get("V")
+            ) + "\n")
+            result_count += 1
+    print("Finished showing %s results.\n" % result_count)
+
 # Flags:
 # -p    ...prefix match instead of exact match
 def do_npcat(es, config, text, flags):

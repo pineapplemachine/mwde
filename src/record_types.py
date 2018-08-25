@@ -403,6 +403,15 @@ record_type_list.append(RecordType("INFO", "dialog_response", [
     SubRecordType("BNAM", "result_text", fields=[
         SubRecordTypeField("s", "text", data_string_exact),
     ]),
+    SubRecordType("QSTN", "quest_name", fields=[
+        SubRecordTypeField(1, "flag", data_integer_signed),
+    ]),
+    SubRecordType("QSTF", "quest_finished", fields=[
+        SubRecordTypeField(1, "flag", data_integer_signed),
+    ]),
+    SubRecordType("QSTR", "quest_restart", fields=[
+        SubRecordTypeField(1, "flag", data_integer_signed),
+    ]),
 ]))
 
 record_type_list.append(RecordType("CELL", "cell", [

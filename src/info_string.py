@@ -106,9 +106,14 @@ def pretty_info_string(
     if info_data:
         disposition = info_data["disposition"]
         if disposition is not None and dialog_type == 4:
-            conditions.append("- If quest status is %s" %
-                pretty_number(config, disposition)
-            )
+            flags = []
+            if info_record.prop("quest_name", "flag"): flags.append("Title")
+            if info_record.prop("quest_finished", "flag"): flags.append("Finished")
+            if info_record.prop("quest_restart", "flag"): flags.append("Restart")
+            conditions.append("- If quest status is %s%s" % (
+                pretty_number(config, disposition),
+                (" (%s)" % ", ".join(flags)) if len(flags) else ""
+            ))
         elif disposition and disposition > 0:
             conditions.append("- If disposition is at least %s" %
                 pretty_number(config, disposition)

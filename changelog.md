@@ -5,6 +5,7 @@
 Third release of MWDE.
 
 - Add "npcat" command for listing NPCs by cell or region
+- Add "journal" command for showing all journal text for a quest
 - Add progress indicator when loading files
 - Add faction name to Player Expelled dialog function condition where known
 - Add faction rank names to some dialog conditions that only showed numbers

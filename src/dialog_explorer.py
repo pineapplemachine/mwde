@@ -150,6 +150,7 @@ while True:
                 "faction": faction_help_text,
                 "cell": cell_help_text,
                 "topic": topic_help_text,
+                "journal": journal_help_text,
                 "quest": quest_help_text,
                 "npcat": npcat_help_text,
                 "load": load_help_text,
@@ -178,6 +179,8 @@ while True:
             do_cell(es, config, text, flags)
         elif command == "topic":
             do_topic(es, config, text, flags)
+        elif command == "journal":
+            do_journal(es, config, text, flags)
         elif command == "quest":
             do_quest(es, config, text, flags)
         elif command == "npcat":
