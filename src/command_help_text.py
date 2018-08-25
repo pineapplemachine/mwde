@@ -18,6 +18,7 @@ more information about a particular command.
     cell
     topic
     quest
+    npcat
     load
     reload
     unload
@@ -123,6 +124,16 @@ Examples:
 Options:
     topic -O  ... Display dialog overwritten by a later file
     topic -V  ... Display more info about responses
+""".strip()
+
+npcat_help_text = """
+List all NPCs in a cell or region.
+    npcat <name>
+Examples:
+    npcat Sadrith Mora, Wolverine Hall: Mage's Guild
+    npcat -p Vivec
+Options:
+    npcat -p  ... Match partial cell and region names
 """.strip()
 
 quest_help_text = """

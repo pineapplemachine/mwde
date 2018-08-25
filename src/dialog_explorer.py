@@ -140,6 +140,7 @@ while True:
                 "cell": cell_help_text,
                 "topic": topic_help_text,
                 "quest": quest_help_text,
+                "npcat": npcat_help_text,
                 "load": load_help_text,
                 "reload": reload_help_text,
                 "unload": unload_help_text,
@@ -168,6 +169,8 @@ while True:
             do_topic(es, config, text, flags)
         elif command == "quest":
             do_quest(es, config, text, flags)
+        elif command == "npcat":
+            do_npcat(es, config, text, flags)
         elif command == "load":
             do_load(es, config, text, flags)
         elif command == "reload":

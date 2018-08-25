@@ -29,53 +29,53 @@ record_type_list.append(RecordType("TES3", "main_header", [
     ]),
 ]))
 
-record_type_list.append(RecordType("SCPT", "script", [
-    SubRecordType("SCHD", "header", fields=[
-        SubRecordTypeField(32, "script_name", data_string_padded),
-        SubRecordTypeField(4, "num_shorts", data_integer_signed),
-        SubRecordTypeField(4, "num_longs", data_integer_signed),
-        SubRecordTypeField(4, "num_floats", data_integer_signed),
-        SubRecordTypeField(4, "script_data_size", data_integer_signed),
-        SubRecordTypeField(4, "local_var_size", data_integer_signed),
-    ]),
-    SubRecordType("SCVR", "variable_name_list", fields=[
-        SubRecordTypeField("s", "variable_names", data_string_list),
-    ]),
-    SubRecordType("SCDT", "compiled_data", fields=[
-        SubRecordTypeField("s", "data", data_string_exact),
-    ]),
-    SubRecordType("SCTX", "script_text", fields=[
-        SubRecordTypeField("s", "text", data_string_exact),
-    ]),
-]))
+# record_type_list.append(RecordType("SCPT", "script", [
+#     SubRecordType("SCHD", "header", fields=[
+#         SubRecordTypeField(32, "script_name", data_string_padded),
+#         SubRecordTypeField(4, "num_shorts", data_integer_signed),
+#         SubRecordTypeField(4, "num_longs", data_integer_signed),
+#         SubRecordTypeField(4, "num_floats", data_integer_signed),
+#         SubRecordTypeField(4, "script_data_size", data_integer_signed),
+#         SubRecordTypeField(4, "local_var_size", data_integer_signed),
+#     ]),
+#     SubRecordType("SCVR", "variable_name_list", fields=[
+#         SubRecordTypeField("s", "variable_names", data_string_list),
+#     ]),
+#     SubRecordType("SCDT", "compiled_data", fields=[
+#         SubRecordTypeField("s", "data", data_string_exact),
+#     ]),
+#     SubRecordType("SCTX", "script_text", fields=[
+#         SubRecordTypeField("s", "text", data_string_exact),
+#     ]),
+# ]))
 
-record_type_list.append(RecordType("GLOB", "global_variable", [
-    SubRecordType("NAME", "name", fields=[
-        SubRecordTypeField("v", "name", data_string_variable),
-    ]),
-    SubRecordType("FNAM", "type_name", fields=[
-        SubRecordTypeField(1, "name", data_string_exact),
-    ]),
-    SubRecordType("FLTV", "value", fields=[
-        # Type depends on type name: 's' (short) 'l' (long) or 'f' (float)
-        SubRecordTypeField(4, "value", data_string_exact),
-    ]),
-]))
+# record_type_list.append(RecordType("GLOB", "global_variable", [
+#     SubRecordType("NAME", "name", fields=[
+#         SubRecordTypeField("v", "name", data_string_variable),
+#     ]),
+#     SubRecordType("FNAM", "type_name", fields=[
+#         SubRecordTypeField(1, "name", data_string_exact),
+#     ]),
+#     SubRecordType("FLTV", "value", fields=[
+#         # Type depends on type name: 's' (short) 'l' (long) or 'f' (float)
+#         SubRecordTypeField(4, "value", data_string_exact),
+#     ]),
+# ]))
 
-record_type_list.append(RecordType("GMST", "game_setting", [
-    SubRecordType("NAME", "name", fields=[
-        SubRecordTypeField("s", "name", data_string_exact),
-    ]),
-    SubRecordType("STRV", "string_value", fields=[
-        SubRecordTypeField("s", "value", data_string_exact),
-    ]),
-    SubRecordType("INTV", "int_value", fields=[
-        SubRecordTypeField(4, "value", data_integer_signed),
-    ]),
-    SubRecordType("FLTV", "float_value", fields=[
-        SubRecordTypeField(4, "value", data_float),
-    ]),
-]))
+# record_type_list.append(RecordType("GMST", "game_setting", [
+#     SubRecordType("NAME", "name", fields=[
+#         SubRecordTypeField("s", "name", data_string_exact),
+#     ]),
+#     SubRecordType("STRV", "string_value", fields=[
+#         SubRecordTypeField("s", "value", data_string_exact),
+#     ]),
+#     SubRecordType("INTV", "int_value", fields=[
+#         SubRecordTypeField(4, "value", data_integer_signed),
+#     ]),
+#     SubRecordType("FLTV", "float_value", fields=[
+#         SubRecordTypeField(4, "value", data_float),
+#     ]),
+# ]))
 
 record_type_list.append(RecordType("CLAS", "class", [
     SubRecordType("NAME", "name", fields=[
@@ -84,32 +84,32 @@ record_type_list.append(RecordType("CLAS", "class", [
     SubRecordType("FNAM", "name_string", fields=[
         SubRecordTypeField("v", "name", data_string_variable),
     ]),
-    SubRecordType("CLDT", "class_data", fields=[
-        SubRecordTypeField(4, "attribute_id_1", data_integer_signed),
-        SubRecordTypeField(4, "attribute_id_2", data_integer_signed),
-        SubRecordTypeField(4, "specialization", data_integer_signed),
-    ] + SubRecordTypeField.repeat(5, [
-        SubRecordTypeField(4, "minor_id", data_integer_signed),
-        SubRecordTypeField(4, "major_id", data_integer_signed),
-    ]) + [
-        SubRecordTypeField(4, "flags", data_flags([
-            (0x01, "playable"),
-        ])),
-        SubRecordTypeField(4, "service_flags", data_flags([
-            (0x00001, "weapons"), (0x00002, "armor"),
-            (0x00004, "clothing"), (0x00008, "books"),
-            (0x00010, "ingredients"), (0x00020, "picks"),
-            (0x00040, "probes"), (0x00080, "lights"),
-            (0x00100, "apparatus"), (0x00200, "repair_items"),
-            (0x00400, "misc_items"), (0x00800, "spells"),
-            (0x01000, "magic_items"), (0x02000, "potions"),
-            (0x04000, "training"), (0x08000, "spellmaking"),
-            (0x10000, "enchanting"), (0x20000, "repairs"),
-        ])),
-    ]),
-    SubRecordType("DESC", "description", fields=[
-        SubRecordTypeField("s", "text", data_string_exact),
-    ]),
+    # SubRecordType("CLDT", "class_data", fields=[
+    #     SubRecordTypeField(4, "attribute_id_1", data_integer_signed),
+    #     SubRecordTypeField(4, "attribute_id_2", data_integer_signed),
+    #     SubRecordTypeField(4, "specialization", data_integer_signed),
+    # ] + SubRecordTypeField.repeat(5, [
+    #     SubRecordTypeField(4, "minor_id", data_integer_signed),
+    #     SubRecordTypeField(4, "major_id", data_integer_signed),
+    # ]) + [
+    #     SubRecordTypeField(4, "flags", data_flags([
+    #         (0x01, "playable"),
+    #     ])),
+    #     SubRecordTypeField(4, "service_flags", data_flags([
+    #         (0x00001, "weapons"), (0x00002, "armor"),
+    #         (0x00004, "clothing"), (0x00008, "books"),
+    #         (0x00010, "ingredients"), (0x00020, "picks"),
+    #         (0x00040, "probes"), (0x00080, "lights"),
+    #         (0x00100, "apparatus"), (0x00200, "repair_items"),
+    #         (0x00400, "misc_items"), (0x00800, "spells"),
+    #         (0x01000, "magic_items"), (0x02000, "potions"),
+    #         (0x04000, "training"), (0x08000, "spellmaking"),
+    #         (0x10000, "enchanting"), (0x20000, "repairs"),
+    #     ])),
+    # ]),
+    # SubRecordType("DESC", "description", fields=[
+    #     SubRecordTypeField("s", "text", data_string_exact),
+    # ]),
 ]))
 
 record_type_list.append(RecordType("FACT", "faction", [
@@ -140,12 +140,12 @@ record_type_list.append(RecordType("FACT", "faction", [
     #         (0x01, "hidden_from_player"),
     #     ])),
     # ]),
-    SubRecordType("ANAM", "faction_reaction_names", fields=[
-        SubRecordTypeField("s", "faction_name", data_string_exact),
-    ]),
-    SubRecordType("INTV", "faction_reaction_values", fields=[
-        SubRecordTypeField(4, "reaction_value", data_integer_signed),
-    ]),
+    # SubRecordType("ANAM", "faction_reaction_names", fields=[
+    #     SubRecordTypeField("s", "faction_name", data_string_exact),
+    # ]),
+    # SubRecordType("INTV", "faction_reaction_values", fields=[
+    #     SubRecordTypeField(4, "reaction_value", data_integer_signed),
+    # ]),
 ]))
 
 record_type_list.append(RecordType("RACE", "race", [
@@ -155,40 +155,40 @@ record_type_list.append(RecordType("RACE", "race", [
     SubRecordType("FNAM", "name_string", fields=[
         SubRecordTypeField("v", "name", data_string_variable),
     ]),
-    SubRecordType("RADT", "race_data", fields=SubRecordTypeField.repeat(7, [
-        SubRecordTypeField(4, "skill_bonus_id", data_integer_signed),
-        SubRecordTypeField(4, "skill_bonus_value", data_integer_signed),
-    ]) + [
-        SubRecordTypeField(4, "base_strength_male", data_integer_signed),
-        SubRecordTypeField(4, "base_strength_female", data_integer_signed),
-        SubRecordTypeField(4, "base_intelligence_male", data_integer_signed),
-        SubRecordTypeField(4, "base_intelligence_female", data_integer_signed),
-        SubRecordTypeField(4, "base_willpower_male", data_integer_signed),
-        SubRecordTypeField(4, "base_willpower_female", data_integer_signed),
-        SubRecordTypeField(4, "base_agility_male", data_integer_signed),
-        SubRecordTypeField(4, "base_agility_female", data_integer_signed),
-        SubRecordTypeField(4, "base_speed_male", data_integer_signed),
-        SubRecordTypeField(4, "base_speed_female", data_integer_signed),
-        SubRecordTypeField(4, "base_endurance_male", data_integer_signed),
-        SubRecordTypeField(4, "base_endurance_female", data_integer_signed),
-        SubRecordTypeField(4, "base_personality_male", data_integer_signed),
-        SubRecordTypeField(4, "base_personality_female", data_integer_signed),
-        SubRecordTypeField(4, "base_luck_male", data_integer_signed),
-        SubRecordTypeField(4, "base_luck_female", data_integer_signed),
-        SubRecordTypeField(4, "base_height_male", data_float),
-        SubRecordTypeField(4, "base_height_female", data_float),
-        SubRecordTypeField(4, "base_weight_male", data_float),
-        SubRecordTypeField(4, "base_weight_female", data_float),
-        SubRecordTypeField(4, "flags", data_flags([
-            (0x01, "playable"), (0x02, "beast")
-        ])),
-    ]),
-    SubRecordType("NPCS", "ability_names", fields=[
-        SubRecordTypeField(32, "name", data_string_padded),
-    ]),
-    SubRecordType("DESC", "description", fields=[
-        SubRecordTypeField("s", "text", data_string_exact),
-    ]),
+    # SubRecordType("RADT", "race_data", fields=SubRecordTypeField.repeat(7, [
+    #     SubRecordTypeField(4, "skill_bonus_id", data_integer_signed),
+    #     SubRecordTypeField(4, "skill_bonus_value", data_integer_signed),
+    # ]) + [
+    #     SubRecordTypeField(4, "base_strength_male", data_integer_signed),
+    #     SubRecordTypeField(4, "base_strength_female", data_integer_signed),
+    #     SubRecordTypeField(4, "base_intelligence_male", data_integer_signed),
+    #     SubRecordTypeField(4, "base_intelligence_female", data_integer_signed),
+    #     SubRecordTypeField(4, "base_willpower_male", data_integer_signed),
+    #     SubRecordTypeField(4, "base_willpower_female", data_integer_signed),
+    #     SubRecordTypeField(4, "base_agility_male", data_integer_signed),
+    #     SubRecordTypeField(4, "base_agility_female", data_integer_signed),
+    #     SubRecordTypeField(4, "base_speed_male", data_integer_signed),
+    #     SubRecordTypeField(4, "base_speed_female", data_integer_signed),
+    #     SubRecordTypeField(4, "base_endurance_male", data_integer_signed),
+    #     SubRecordTypeField(4, "base_endurance_female", data_integer_signed),
+    #     SubRecordTypeField(4, "base_personality_male", data_integer_signed),
+    #     SubRecordTypeField(4, "base_personality_female", data_integer_signed),
+    #     SubRecordTypeField(4, "base_luck_male", data_integer_signed),
+    #     SubRecordTypeField(4, "base_luck_female", data_integer_signed),
+    #     SubRecordTypeField(4, "base_height_male", data_float),
+    #     SubRecordTypeField(4, "base_height_female", data_float),
+    #     SubRecordTypeField(4, "base_weight_male", data_float),
+    #     SubRecordTypeField(4, "base_weight_female", data_float),
+    #     SubRecordTypeField(4, "flags", data_flags([
+    #         (0x01, "playable"), (0x02, "beast")
+    #     ])),
+    # ]),
+    # SubRecordType("NPCS", "ability_names", fields=[
+    #     SubRecordTypeField(32, "name", data_string_padded),
+    # ]),
+    # SubRecordType("DESC", "description", fields=[
+    #     SubRecordTypeField("s", "text", data_string_exact),
+    # ]),
 ]))
 
 record_type_list.append(RecordType("NPC_", "npc", [
@@ -230,29 +230,29 @@ record_type_list.append(RecordType("NPC_", "npc", [
         SubRecordTypeField(1, "unknown_3", data_integer_signed),
         SubRecordTypeField(4, "gold", data_integer_signed),
     ]),
-    SubRecordType("NPDT", "npc_data", required_size=52, fields=[
-        SubRecordTypeField(2, "level", data_integer_signed),
-        SubRecordTypeField(1, "strength", data_integer_signed),
-        SubRecordTypeField(1, "intelligence", data_integer_signed),
-        SubRecordTypeField(1, "willpower", data_integer_signed),
-        SubRecordTypeField(1, "agility", data_integer_signed),
-        SubRecordTypeField(1, "speed", data_integer_signed),
-        SubRecordTypeField(1, "endurance", data_integer_signed),
-        SubRecordTypeField(1, "personality", data_integer_signed),
-        SubRecordTypeField(1, "luck", data_integer_signed),
-    ] + SubRecordTypeField.repeat(27, [
-        SubRecordTypeField(1, "skill", data_integer_signed),
-    ]) + [
-        SubRecordTypeField(1, "reputation", data_integer_signed),
-        SubRecordTypeField(2, "health", data_integer_signed),
-        SubRecordTypeField(2, "magicka", data_integer_signed),
-        SubRecordTypeField(2, "fatigue", data_integer_signed),
-        SubRecordTypeField(1, "disposition", data_integer_signed),
-        SubRecordTypeField(1, "faction_id", data_integer_signed),
-        SubRecordTypeField(1, "faction_rank", data_integer_signed),
-        SubRecordTypeField(1, "unknown_1", data_integer_signed),
-        SubRecordTypeField(4, "gold", data_integer_signed),
-    ]),
+    # SubRecordType("NPDT", "npc_data", required_size=52, fields=[
+    #     SubRecordTypeField(2, "level", data_integer_signed),
+    #     SubRecordTypeField(1, "strength", data_integer_signed),
+    #     SubRecordTypeField(1, "intelligence", data_integer_signed),
+    #     SubRecordTypeField(1, "willpower", data_integer_signed),
+    #     SubRecordTypeField(1, "agility", data_integer_signed),
+    #     SubRecordTypeField(1, "speed", data_integer_signed),
+    #     SubRecordTypeField(1, "endurance", data_integer_signed),
+    #     SubRecordTypeField(1, "personality", data_integer_signed),
+    #     SubRecordTypeField(1, "luck", data_integer_signed),
+    # ] + SubRecordTypeField.repeat(27, [
+    #     SubRecordTypeField(1, "skill", data_integer_signed),
+    # ]) + [
+    #     SubRecordTypeField(1, "reputation", data_integer_signed),
+    #     SubRecordTypeField(2, "health", data_integer_signed),
+    #     SubRecordTypeField(2, "magicka", data_integer_signed),
+    #     SubRecordTypeField(2, "fatigue", data_integer_signed),
+    #     SubRecordTypeField(1, "disposition", data_integer_signed),
+    #     SubRecordTypeField(1, "faction_id", data_integer_signed),
+    #     SubRecordTypeField(1, "faction_rank", data_integer_signed),
+    #     SubRecordTypeField(1, "unknown_1", data_integer_signed),
+    #     SubRecordTypeField(4, "gold", data_integer_signed),
+    # ]),
     SubRecordType("FLAG", "flags", fields=[
         SubRecordTypeField(4, "flags", data_flags([
             (0x0001, "female"),
@@ -263,34 +263,34 @@ record_type_list.append(RecordType("NPC_", "npc", [
             (0x0800, "blood_metal"), # ?
         ])),
     ]),
-    SubRecordType("NPCO", "inventory_items", fields=[
-        SubRecordTypeField(4, "item_count", data_integer_signed),
-        SubRecordTypeField(32, "item_name", data_string_padded),
-    ]),
-    SubRecordType("NPCS", "spells", fields=[
-        SubRecordTypeField(32, "spell_name", data_string_padded),
-    ]),
-    SubRecordType("AIDT", "ai_data", fields=[
-        SubRecordTypeField(1, "hello", data_integer_signed),
-        SubRecordTypeField(1, "unknown_1", data_integer_signed),
-        SubRecordTypeField(1, "fight", data_integer_signed),
-        SubRecordTypeField(1, "flee", data_integer_signed),
-        SubRecordTypeField(1, "alarm", data_integer_signed),
-        SubRecordTypeField(1, "unknown_2", data_integer_signed),
-        SubRecordTypeField(1, "unknown_3", data_integer_signed),
-        SubRecordTypeField(1, "unknown_4", data_integer_signed),
-        SubRecordTypeField(4, "service_flags", data_flags([
-            (0x00001, "weapons"), (0x00002, "armor"),
-            (0x00004, "clothing"), (0x00008, "books"),
-            (0x00010, "ingredients"), (0x00020, "picks"),
-            (0x00040, "probes"), (0x00080, "lights"),
-            (0x00100, "apparatus"), (0x00200, "repair_items"),
-            (0x00400, "misc_items"), (0x00800, "spells"),
-            (0x01000, "magic_items"), (0x02000, "potions"),
-            (0x04000, "training"), (0x08000, "spellmaking"),
-            (0x10000, "enchanting"), (0x20000, "repairs"),
-        ])),
-    ]),
+    # SubRecordType("NPCO", "inventory_items", fields=[
+    #     SubRecordTypeField(4, "item_count", data_integer_signed),
+    #     SubRecordTypeField(32, "item_name", data_string_padded),
+    # ]),
+    # SubRecordType("NPCS", "spells", fields=[
+    #     SubRecordTypeField(32, "spell_name", data_string_padded),
+    # ]),
+    # SubRecordType("AIDT", "ai_data", fields=[
+    #     SubRecordTypeField(1, "hello", data_integer_signed),
+    #     SubRecordTypeField(1, "unknown_1", data_integer_signed),
+    #     SubRecordTypeField(1, "fight", data_integer_signed),
+    #     SubRecordTypeField(1, "flee", data_integer_signed),
+    #     SubRecordTypeField(1, "alarm", data_integer_signed),
+    #     SubRecordTypeField(1, "unknown_2", data_integer_signed),
+    #     SubRecordTypeField(1, "unknown_3", data_integer_signed),
+    #     SubRecordTypeField(1, "unknown_4", data_integer_signed),
+    #     SubRecordTypeField(4, "service_flags", data_flags([
+    #         (0x00001, "weapons"), (0x00002, "armor"),
+    #         (0x00004, "clothing"), (0x00008, "books"),
+    #         (0x00010, "ingredients"), (0x00020, "picks"),
+    #         (0x00040, "probes"), (0x00080, "lights"),
+    #         (0x00100, "apparatus"), (0x00200, "repair_items"),
+    #         (0x00400, "misc_items"), (0x00800, "spells"),
+    #         (0x01000, "magic_items"), (0x02000, "potions"),
+    #         (0x04000, "training"), (0x08000, "spellmaking"),
+    #         (0x10000, "enchanting"), (0x20000, "repairs"),
+    #     ])),
+    # ]),
     # SubRecordType("AI_W", "ai_wander", fields=[
     #     SubRecordTypeField(2, "distance", data_integer_signed),
     #     SubRecordTypeField(2, "duration", data_integer_signed),
@@ -402,5 +402,17 @@ record_type_list.append(RecordType("INFO", "dialog_response", [
     ]),
     SubRecordType("BNAM", "result_text", fields=[
         SubRecordTypeField("s", "text", data_string_exact),
+    ]),
+]))
+
+record_type_list.append(RecordType("CELL", "cell", [
+    SubRecordType("NAME", "name", fields=[
+        SubRecordTypeField("v", "name", data_string_variable),
+    ]),
+    SubRecordType("RGNN", "region_name", fields=[
+        SubRecordTypeField("v", "name", data_string_variable),
+    ]),
+    SubRecordType("FRMR", "object_indexes", fields=[
+        SubRecordTypeField(4, "index", data_integer_signed),
     ]),
 ]))

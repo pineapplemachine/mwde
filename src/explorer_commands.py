@@ -273,6 +273,62 @@ def do_quest(es, config, text, flags):
             result_count += 1
     print("Finished showing %s results.\n" % result_count)
 
+# Flags:
+# -p    ...prefix match instead of exact match
+def do_npcat(es, config, text, flags):
+    text = bytes(text.encode("latin-1", "ignore"))
+    if len(text) == 0:
+        print("Must provide a cell or region name.\n")
+        return
+    print("Starting NPC search by location.\n")
+    wrapper.width = get_wrap_width()
+    result_count = 0
+    lower_text = text.lower()
+    for record in es.iter_records():
+        if record.type_name != b"CELL": continue
+        cell_name = record.prop("name", "name")
+        region_name = record.prop("region_name", "name")
+        if not ((cell_name and ((
+            flags.get("p") and cell_name.lower().startswith(lower_text)
+        ) or (
+            not flags.get("p") and cell_name.lower() == lower_text
+        ))) or (region_name and ((
+            flags.get("p") and region_name.lower().startswith(lower_text)
+        ) or (
+            not flags.get("p") and region_name.lower() == lower_text
+        )))):
+            continue
+        sub_records_len = len(record.sub_records)
+        for i in range(sub_records_len):
+            sub_record = record.sub_records[i]
+            if sub_record.type_name == b"FRMR" and i + 1 < sub_records_len:
+                contained_record_name = record.sub_records[i + 1][0].value
+                contained_record = es.get_record_by_name_id(
+                    b"NPC_", contained_record_name
+                )
+                if not contained_record:
+                    continue
+                if not cell_name and not region_name:
+                    continue
+                elif cell_name and region_name:
+                    print("Found: %s  Cell: %s @ Region: %s" % (
+                        contained_record.prop("name", "name").decode("latin-1"),
+                        cell_name.decode("latin-1"), region_name.decode("latin-1")
+                    ))
+                elif cell_name:
+                    print("Found: %s  Cell: %s" % (
+                        contained_record.prop("name", "name").decode("latin-1"),
+                        cell_name.decode("latin-1")
+                    ))
+                elif region_name:
+                    print("Found: %s  Region: %s" % (
+                        contained_record.prop("name", "name").decode("latin-1"),
+                        region_name.decode("latin-1")
+                    ))
+                result_count += 1
+    if result_count: print("")
+    print("Finished showing %s results.\n" % result_count)
+
 def do_load(es, config, text, flags):
     if len(text) == 0:
         print("Must provide a data file path.\n")
