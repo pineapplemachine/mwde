@@ -77,6 +77,9 @@ if len(load_path_list):
     loaded_count = 0
     for load_path in config["load_paths"]:
         path = os.path.normpath(normalize_path(load_path))
+        if not os.path.exists(path):
+            print("File \"%s\" not found." % path)
+            continue
         try:
             with open(path, "rb") as binary_file:
                 es_file = read_elder_scrolls_file(path, binary_file,
