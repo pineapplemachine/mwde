@@ -5,7 +5,9 @@ except ImportError:
 
 def get_boolean(text):
     text = text.strip().lower()
-    return text in ("1", "y", "yes", "t", "true")
+    for option in ("1", "y", "yes", "t", "true"):
+        if text == option: return True
+    return False
 
 def parse_config(config_path):
     config_parser = ConfigParser()
