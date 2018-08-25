@@ -1,5 +1,16 @@
 # Morrowind Dialog Explorer changelog
 
+## v1.2 - "Bamz-Amschend" - 25 August 2018
+
+Third release of MWDE.
+
+- Add "npcat" command for listing NPCs by cell or region
+- Add progress indicator when loading files
+- Add faction name to Player Expelled dialog function condition where known
+- Add faction rank names to some dialog conditions that only showed numbers
+- Add dialog choice text to dialog condition list when relevant and available
+- Fix issue displaying player faction requirements in dialog conditions
+
 ## v1.1 - "Bal Fell" - 21 August 2018
 
 Second release of MWDE.
