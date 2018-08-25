@@ -11,8 +11,10 @@ from file_load_progress import update_load_progress
 
 normal = b"\033[0m"
 emphasis = b"\033[42m"
-cell_color = b"\033[96m"
-region_color = b"\033[92m"
+
+reset_color = "\033[0m"
+cell_color = "\033[96m"
+region_color = "\033[92m"
 
 wrapper = TextWrapper(
     initial_indent="    ",
@@ -289,12 +291,12 @@ def do_npcat(es, config, text, flags):
     result_count = 0
     lower_text = text.lower()
     cell_str = (
-        cell_color + "Cell:" + normal if config.get("npcat_list_highlighting")
-        else "Cell:"
+        cell_color + "Cell:" + reset_color
+        if config.get("npcat_list_highlighting") else "Cell:"
     )
     region_str = (
-        region_color + "Region:" + normal if config.get("npcat_list_highlighting")
-        else "Region:"
+        region_color + "Region:" + reset_color
+        if config.get("npcat_list_highlighting") else "Region:"
     )
     for record in es.iter_records():
         if record.type_name != b"CELL": continue
