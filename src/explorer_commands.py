@@ -397,7 +397,9 @@ def do_reload(es, config, text, flags):
                     after_read_record=update_load_progress(es_file.path)
                 )
             es.es_files[i] = new_file
-            print("\nFinished loading data file.\n")
+            print("\nFinished reloading data file. (%s records)\n" %
+                len(new_file.records)
+            )
             return
     print("File \"%s\" is not loaded.\n" % input_base_name)
 
