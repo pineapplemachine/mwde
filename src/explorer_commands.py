@@ -1,11 +1,13 @@
 import re
 import os
+import sys
 from get_terminal_size import get_terminal_size
 from textwrap import TextWrapper
 
 from normalize_path import normalize_path
 from info_string import pretty_info_string
 from load_es_file import read_elder_scrolls_file
+from file_load_progress import update_load_progress
 
 normal = b"\033[0m"
 emphasis = b"\033[42m"
@@ -354,11 +356,12 @@ def do_load(es, config, text, flags):
             print("File \"%s\" is already loaded.\n" % input_base_name)
             return
     path = os.path.normpath(text)
-    print("Loading \"%s\"..." % path)
     with open(path, "rb") as binary_file:
-        es_file = read_elder_scrolls_file(path, binary_file)
+        es_file = read_elder_scrolls_file(path, binary_file,
+            after_read_record=update_load_progress(path)
+        )
     es.add_file(es_file)
-    print("Finished loading data file. (%s records)\n" % len(es_file.records))
+    print("\nFinished loading data file. (%s records)\n" % len(es_file.records))
 
 def do_reload(es, config, text, flags):
     if len(text) == 0:
@@ -369,11 +372,12 @@ def do_reload(es, config, text, flags):
     for i in range(len(es.es_files)):
         es_file = es.es_files[i]
         if os.path.basename(es_file.path) == input_base_name:
-            print("Loading \"%s\"..." % es_file.path)
             with open(es_file.path, "rb") as binary_file:
-                new_file = read_elder_scrolls_file(es_file.path, binary_file)
+                new_file = read_elder_scrolls_file(es_file.path, binary_file,
+                    after_read_record=update_load_progress(es_file.path)
+                )
             es.es_files[i] = new_file
-            print("Finished loading data file.\n")
+            print("\nFinished loading data file.\n")
             return
     print("File \"%s\" is not loaded.\n" % input_base_name)
 

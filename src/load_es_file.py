@@ -18,7 +18,7 @@ def read_elder_scrolls_paths(*paths):
     print("Finished loading data files.")
     return ESData(es_file_list)
 
-def read_elder_scrolls_file(path, binary_file):
+def read_elder_scrolls_file(path, binary_file, after_read_record=None):
     es_file = ESFile(path, [])
     while True:
         record = read_record(es_file, binary_file)
@@ -28,7 +28,10 @@ def read_elder_scrolls_file(path, binary_file):
             es_file.records.append(record)
         else:
             break
+        if after_read_record:
+            after_read_record(es_file, record)
     es_file.process_data()
+    after_read_record(es_file, None)
     return es_file
 
 def read_record(es_file, binary_file):

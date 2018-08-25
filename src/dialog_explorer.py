@@ -10,6 +10,7 @@ from parse_config import parse_config
 from normalize_path import normalize_path
 from record_classes import ESData
 from load_es_file import read_elder_scrolls_file
+from file_load_progress import update_load_progress
 from explorer_commands import *
 from command_help_text import *
 
@@ -76,13 +77,16 @@ if len(load_path_list):
     loaded_count = 0
     for load_path in config["load_paths"]:
         path = os.path.normpath(normalize_path(load_path))
-        print("Loading \"%s\"..." % path)
         try:
             with open(path, "rb") as binary_file:
-                es_file = read_elder_scrolls_file(path, binary_file)
+                es_file = read_elder_scrolls_file(path, binary_file,
+                    after_read_record=update_load_progress(path)
+                )
             es.add_file(es_file)
             loaded_count += 1
+            print("")
         except:
+            print("")
             print("FILE LOAD ERROR. Please report bugs online at")
             print("  https://github.com/pineapplemachine/mwde/issues")
             print(traceback.format_exc())
