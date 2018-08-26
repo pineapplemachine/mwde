@@ -94,7 +94,7 @@ def pretty_info_string(
         rank_name = es.get_faction_rank_name(
             player_faction_name, player_faction_rank
         )
-        conditions.append("- If player rank in faction %s is %s%s" % (
+        conditions.append("- If player rank in faction %s is at least %s%s" % (
             player_faction_name.decode("latin-1", "ignore"),
             pretty_number(config, player_faction_rank),
             " (%s)" % rank_name.decode("latin-1", "ignore") if rank_name else ""
